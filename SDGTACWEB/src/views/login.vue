@@ -40,7 +40,7 @@ export default {
     register() {
       alert("Redirigiendo a la página de registro...");
       // Redirige a la página de registro
-      this.$router.push('/ClientRegister');
+      this.$router.push('/Client-Register-Form');
     },
   },
 };
