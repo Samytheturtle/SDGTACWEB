@@ -1,11 +1,11 @@
 <template>
   <div>
+    <div class="BackgrountlogoRG">
+        <img src="../assets/logo_cuevas.png" alt="Logo de la empresa" class="logoRG" />
+    </div>
     <div class="container">
-      <h1>Registro de Cliente</h1>
-      <div class="Backgrountlogo">
-        <img src="../assets/logo_cuevas.png" alt="Logo de la empresa" class="logo" />
-      </div>
-      <form class="content">
+      <h2>Registro de Cliente</h2>
+      <form>
         <div class="form-group">
           <label for="fullName">Nombre completo:</label>
           <input type="text" id="fullName" v-model="fullName" required />
@@ -16,7 +16,7 @@
         </div>
         <div class="form-group">
           <label for="phoneNumber">Número de teléfono celular:</label>
-          <input type="tel" id="phoneNumber" v-model="phoneNumber" required />
+          <input type="number" id="phoneNumber" v-model="phoneNumber" required />
         </div>
         <div class="form-group">
           <label for="password">Contraseña:</label>
@@ -26,9 +26,9 @@
           <label for="passwordConfirm">Confirmar Contraseña:</label>
           <input type="password" id="passwordConfirm" v-model="passwordConfirm" required />
         </div>
-        <button @click="register">Registrar</button>
-        <button @click="cancel">Cancelar</button>
       </form>
+      <button @click="register">Registrar</button>
+      <button @click="cancel">Cancelar</button>
     </div>
   </div>
 </template>
@@ -74,61 +74,60 @@ export default {
 </script>
 
 <style>
-.body {
-  font-family: Arial, sans-serif;
-  background-color: #f7e1e1;
-  background-repeat: no-repeat;
-  background-size: cover;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-image: url("../assets/BackgrownLogin.jpg");
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7e1e1;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url("../assets/BackgrownLogin.jpg");
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 200%;
-  max-width: 400px;
+.logoRG {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    display: flex;
 }
 
-.container h1 {
+.BackgrountlogoRG {
+    position: fixed;
+    top: 10%; 
+    left: 50%; 
+    transform: translateX(-50%);
+    width: 50%; 
+    max-width: 400px;
+    background-color: #ffffff;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+h2 {
+  color: rgb(0, 0, 0);
+  font-weight: bold;
   text-align: center;
-  color: black;
-  margin-bottom: 20px;
+}
+.container {
+    position: fixed;
+    width: 100%;
+    top: 40%; 
+    transform: translateX(-50%);
+    max-width: 400px;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
 }
 
-.logo {
-  width: 100%;
-  max-width: 400px;
+form {
+    margin-top: 20px;
 }
-
-.Backgrountlogo {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 200%;
-  max-width: 400px;
-  background-color: #ffffff;
-  padding: 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-}
-
-.content {
-  width: 100%;
-  max-width: 400px;
-  padding: 20px;
-  background-color: #ffffff;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
 .form-group {
   margin-bottom: 10px;
 }
@@ -169,5 +168,3 @@ button:hover {
   background-color: #ffefd3;
 }
 </style>
-
-

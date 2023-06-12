@@ -18,7 +18,6 @@
       <button @click="login">Iniciar Sesión</button>
       <button @click="register">Registrarse</button> 
     </div>
-    
   </div>
 </template>
 
@@ -77,6 +76,11 @@ body {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
 }
+h1 {
+    font-weight: bold;
+    text-align: center;
+    color: black;
+}
 .contenido {
     position: fixed;
     width: 100%;
@@ -88,14 +92,8 @@ body {
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-
+    overflow-y: auto;
 }
-
-h1 {
-    text-align: center;
-    color: black;
-}
-
 form {
     margin-top: 20px;
 }

@@ -18,7 +18,6 @@ const router = createRouter({
       name: 'CLIREGISTER',
       component: () => import('../views/ClientRegister.vue')
     }
-    ,
   ]
 })
 

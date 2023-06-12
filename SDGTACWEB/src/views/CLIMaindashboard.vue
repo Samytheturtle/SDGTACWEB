@@ -1,15 +1,16 @@
 <template>
-  <div class="container">
-    <div class="header">
-      <img src="../assets/logo_cuevas.png" alt="Logo de la empresa" class="logo" />
-      <div class="header-buttons">
+  <div class="containerCLIMDB">
+    <div class="headerCLIMDB">
+      <img src="../assets/logo_cuevas.png" alt="Logo de la empresa" class="logoCLI" />
+      <div class="header-buttonsCLIMDB">
         <button @click="addDeliveryAddress">Agregar Dirección</button>
         <button @click="addPaymentMethod">Agregar Método de Pago</button>
         <button @click="logout">Salir</button>
       </div>
     </div>
-    <div class="content">
-      <div class="tabs">
+
+    <div class="contentCLIMDB">
+      <div class="tabs1">
         <div
           class="tab"
           :class="{ active: activeTab === 'catalog' }"
@@ -32,16 +33,16 @@
           Visualizar Lista de Pedidos
         </div>
       </div>
-      <div class="tab-content">
-        <template v-if="activeTab === 'catalog'">
+      <div class="tab-contentCLIMDB">
+        <template v-if="activeTab === 'catalogo'">
           <h2>Consultar Catálogo de Productos</h2>
           <!-- Aquí puedes mostrar el catálogo de productos -->
         </template>
-        <template v-if="activeTab === 'cart'">
+        <template v-if="activeTab === 'carrito'">
           <h2>Consultar Carrito de Compras</h2>
           <!-- Aquí puedes mostrar el contenido del carrito de compras -->
         </template>
-        <template v-if="activeTab === 'orders'">
+        <template v-if="activeTab === 'pedidos'">
           <h2>Visualizar Lista de Pedidos</h2>
           <!-- Aquí puedes mostrar la lista de pedidos -->
         </template>
@@ -70,94 +71,85 @@ export default {
     logout() {
       // Lógica para cerrar sesión
       // Redirige al cliente a la página de inicio de sesión
-      this.$router.push('/login');
+      this.$router.push('/');
     },
   },
 };
 </script>
-
 <style>
-.container {
+body {
   font-family: Arial, sans-serif;
   background-color: #f7e1e1;
   background-repeat: no-repeat;
   background-size: cover;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   height: 100vh;
   background-image: url("../assets/BackgrownLogin.jpg");
 }
-
-.header {
+.containerCLIMDB {
+  width: 100%;
+  max-width: 600px;
+  padding: 20px;
+}
+.headerCLIMDB {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 20px;
   background-color: #ffffff;
-  padding: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.logo {
-  width: 150px;
+.logoCLI {
+  width: 100%;
+  max-width: 200px;
 }
 
-.header-buttons {
-  display: flex;
-}
-
-.header-buttons button {
+.header-buttonsCLIMDB button {
   margin-left: 10px;
-  padding: 8px 16px;
-  font-size: 14px;
-  font-weight: bold;
-  background-color: #8b7a5e;
-  color: #fff;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  transition: 0.3s;
 }
 
-.header-buttons button:hover {
-  background-color: #ffefd3;
+.contentCLIMDB {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+/*.contentCLIMDB {
+  margin-top: 20px;
+  width: 100%;
+  max-width: 600px;
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}*/
 
-.content {
-  flex: 1;
+.tabs1 {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.tabs {
-  display: flex;
+  justify-content: space-between;
   margin-bottom: 20px;
 }
 
 .tab {
   padding: 10px 20px;
-  font-size: 16px;
-  font-weight: bold;
-  color: #2c3e50;
+  background-color: #8b7a5e;
+  color: #fff;
+  border-radius: 5px;
   cursor: pointer;
-  transition: 0.3s;
-}
-
-.tab:hover {
-  color: #42b983;
 }
 
 .tab.active {
-  color: #42b983;
-  border-bottom: 2px solid #42b983;
+  background-color: #ffefd3;
 }
 
-.tab-content {
-  text-align: center;
+.tab-contentCLIMDB h2 {
+  margin-bottom: 10px;
 }
 
-h2 {
-  color: #2c3e50;
-}
 </style>
