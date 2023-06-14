@@ -22,6 +22,16 @@ const router = createRouter({
       path: '/IncidentReport-Form',
       name: 'INCIDENTREP',
       component: () => import('../views/IncidentReport.vue')
+    },
+    {
+      path: '/Payment-Method-Form',
+      name: 'PAYMENT',
+      component: () => import('../views/PaymentMethod.vue')
+    },
+    {
+      path: '/User-Register-Form',
+      name: 'USERREGISTER',
+      component: () => import('../views/UserRegister.vue')
     }
   ]
 })
