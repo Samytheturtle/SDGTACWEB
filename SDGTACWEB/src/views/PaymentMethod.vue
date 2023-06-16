@@ -71,16 +71,17 @@
                     v-model="cvv"
                 />
             </form>
-            <button @click="RegisterMethod">Registrar</button>
-            <button @click="Cancel">Cancelar</button>
+            <CustomButton @click="RegisterMethod" description="Registrar"/>
+            <CustomButton @click="Cancel" description="Cancelar"/>
         </div>
     </div>
 </template>
 
 <script>
+import CustomButton from '../components/CustomButton.vue';
 import CustomInput from '../components/CustomInput.vue';
 import CustomSelect from '../components/CustomSelect.vue';
-import ValidatorMethodForm from '../components/ValidatorMethodForm.vue';
+import ValidatorMethodForm from '../utils/validation/ValidatorMethodForm.vue';
 
 export default{
     data() {
@@ -168,7 +169,7 @@ export default{
             this.$router.push("/Client-Main-Dash-Board");
         }
     },
-    components: { CustomInput, CustomSelect }
+    components: { CustomInput, CustomSelect, CustomButton }
 }
 </script>
 
@@ -204,7 +205,7 @@ body {
     margin-bottom: 20px;
 }
 
-h2 {
+h1 {
   color: rgb(0, 0, 0);
   font-weight: bold;
   text-align: center;
@@ -227,30 +228,5 @@ h2 {
 
 form {
     margin-top: 20px;
-}
-
-label {
-  display: block;
-  font-weight: bold;
-  color: black;
-}
-
-button {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  font-weight: bold;
-  background-color: #8b7a5e;
-  color: #fff;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: 0.3s;
-}
-
-button:hover {
-  background-color: #ffefd3;
 }
 </style>

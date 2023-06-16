@@ -71,16 +71,17 @@
                     v-model="confirmedPassword"
                 />
             </form>
-            <button @click="RegisterUser">Registrar</button>
-            <button @click="Cancel">Cancelar</button>
+            <customButton @click="RegisterUser" description="Registrar"/>
+            <CustomButton @click="Cancel" description="Cancelar"/>
         </div>
     </div>
 </template>
 
 <script>
+import CustomButton from '../components/CustomButton.vue';
 import CustomInput from '../components/CustomInput.vue';
 import CustomSelect from '../components/CustomSelect.vue';
-import ValidatorUserForm from '../components/ValidatorUserForm.vue';
+import ValidatorUserForm from '../utils/validation/ValidatorUserForm.vue';
 
 const dateNow = new Date().toISOString().split('T')[0];
 
@@ -149,7 +150,7 @@ export default{
         Cancel() {
         }
     },
-    components: { CustomInput, CustomSelect }
+    components: { CustomInput, CustomSelect, CustomButton }
 }
 </script>
 
@@ -185,7 +186,7 @@ body {
     margin-bottom: 20px;
 }
 
-h2 {
+h1 {
   color: rgb(0, 0, 0);
   font-weight: bold;
   text-align: center;
@@ -208,48 +209,5 @@ h2 {
 
 form {
     margin-top: 20px;
-}
-.form-group {
-  margin-bottom: 10px;
-}
-
-label {
-  display: block;
-  font-weight: bold;
-  color: black;
-}
-
-select,
-input[type="text"],
-input[type="password"],
-input[type="date"] {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  border-color: #8b7a5e;
-}
-
-button {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  font-weight: bold;
-  background-color: #8b7a5e;
-  color: #fff;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: 0.3s;
-}
-
-button:hover {
-  background-color: #ffefd3;
-}
-
-.error{
-    color: red;
 }
 </style>

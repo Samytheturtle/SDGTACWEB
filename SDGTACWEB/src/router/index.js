@@ -19,19 +19,29 @@ const router = createRouter({
       component: () => import('../views/ClientRegister.vue')
     },
     {
-      path: '/IncidentReport-Form',
+      path: '/Incident-Report-Form',
       name: 'INCIDENTREP',
       component: () => import('../views/IncidentReport.vue')
     },
     {
       path: '/Payment-Method-Form',
-      name: 'PAYMENT',
+      name: 'PAYREGISTER',
       component: () => import('../views/PaymentMethod.vue')
     },
     {
       path: '/User-Register-Form',
       name: 'USERREGISTER',
       component: () => import('../views/UserRegister.vue')
+    },
+    {
+      path: '/Address-Register-Form',
+      name: 'ADDREGISTER',
+      component: () => import('../views/AddressRegister.vue')
+    },
+    {
+      path:  '/Administrator-Main-Dash-Board',
+      name: 'ADMMDB',
+      component: () => import('../views/ADMMaindashboard.vue')
     }
   ]
 })

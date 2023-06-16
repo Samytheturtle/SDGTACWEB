@@ -3,7 +3,7 @@
         <label>
             {{ label }}
         </label>
-        <select :name="name" @blur="blur" :value="modelValue" @input="updateValue">
+        <select :name="name" @blur="blur" @change="change" :value="modelValue" @input="updateValue">
             <option v-for="option in options" v-bind:value="option.value">
                 {{ option.label }}
             </option>
@@ -12,22 +12,13 @@
     </div>
 </template>
 
-<script>
+<script scoped>
 export default{
     props:{
         options: Array,
-        label:{
-            type: String,
-            required: true
-        },
-        error:{
-            type: String,
-            required: true
-        },
-        name:{
-            type: String,
-            required: true
-        },
+        label: String,
+        error: String,
+        name: String,
         modelValue: ''
     },
     setup(props, context){
@@ -37,7 +28,10 @@ export default{
         const blur = (event) => {
             context.emit('blur', event);
         }
-        return {updateValue, blur}
+        const change = (event) => {
+            context.emit('change', event);
+        }
+        return {updateValue, blur, change}
     }
 }
 </script>

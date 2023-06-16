@@ -24,6 +24,18 @@ const Validator = (value) =>{
             }
             return false
         },
+        isCorrectMinNumber(min){
+            if(value >= min){
+                return true
+            }
+            return false
+        },
+        isCorrectMaxNumber(max){
+            if(value <= max){
+                return true
+            }
+            return false
+        },
         isCorrectMinLength(min){
             if(value.length >= min){
                 return true
