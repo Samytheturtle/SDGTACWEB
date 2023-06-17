@@ -22,6 +22,16 @@
 </template>
 
 <script>
+//import postAuthAxios from '../logic/postAuthAxios'
+import { ref } from 'vue'
+import useLogin from '../viewModel/loginViewModel'
+
+var respuesta = [];
+let jsontest = {
+  "nombreUsuario ": "" ,
+  "telefono": "",
+  "contrasena": ""
+}
 export default {
   data() {
     return {
@@ -31,6 +41,9 @@ export default {
   },
   methods: {
     login() {
+      //consume el servicio de login
+      useLogin(this.username, this.password)
+      
       alert("Usuario: " + this.username + "\nContraseña: " + this.password);
       // Redirige a la página de inicio de sesión exitosa
       
