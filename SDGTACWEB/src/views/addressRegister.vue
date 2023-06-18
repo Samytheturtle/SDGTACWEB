@@ -104,9 +104,11 @@ import {
     getSuburbs,
     useGeocoder,
     validateForm,
-    handleInputChange
+    handleInputChange,
+    postAddress
 } from '../viewModel/AddressRegisterViewModel';
 
+var respuesta = [];
 var statesArray = [];
 var municipalitiesArray = [];
 var suburbsArray = [];
@@ -114,6 +116,7 @@ var suburbsArray = [];
 
 export default{
     setup(){
+        let userId = 4; //OBTENER DE ALGÚN MODO EL ID DEL CLIENTE QUE INICIÓ SESIÓN Y COLOCARLO AQUÍ AL ABRIR LA VENTANA.
         let geoCoderService = ref({geo:{}});
         let marker = ref({
             title: 'Xalapa-Enríquez, Ver., México',
@@ -124,6 +127,7 @@ export default{
         });
 
         return {
+            userId,
             marker,
             geoCoderService
         }
@@ -155,13 +159,35 @@ export default{
         }
     },
     methods:{
-        registerAddress(){
+        async registerAddress(){
             const messages = validateForm(this);
-
             if (messages.length === 0) {
-                this.$router.push("/Client-Main-Dash-Board");
+                //Check de los datos actuales - Eliminar este console.log despues
+                console.log("Check: "+this.userId +" "+ this.zipcode + " " +this.state+" "+ this.municipality+" "+this.suburb+" "+this.street+" "+
+                this.streetNumber+" "+this.apartmentNumber+" "+this.marker.position.lat+ " "+ this.marker.position.lng)
+
+                //Haciendo POST con Axios
+                const promise = postAddress(this.userId, this.zipcode, this.state, this.municipality, this.suburb, this.street,
+                this.streetNumber, this.apartmentNumber, this.marker.position.lat, this.marker.position.lng);
+                
+                //Comprobando Promise
+                console.log("Desde Address Register/nPromise: ");
+                console.log(promise);
+
+                //Comprobando Respuesta
+                await promise.then(array => respuesta = array);
+                console.log("Respuesta: ");
+                console.log(respuesta)
+
+                if(respuesta.idUsuario == this.userId){
+                    alert("¡Se registró el domicilio!");
+                    
+                }else{
+                    alert("No se registro el domicilio");
+                }
+                
             }else{
-                alert('Llene los campos correctamente.')
+                alert('Llene los campos correctamente')
             }
         },
         validate(event){
@@ -224,17 +250,13 @@ body {
 }
 
 .logoRG {
-    position: relative;
     width: 100%;
     max-width: 300px;
     display: inline-block;
 }
 
 .BackgrountlogoRG {
-    position: relative;
-    top: 20%;
-    left: 100%; 
-    transform: translateX(-50%);
+    position: center;
     width: 50%; 
     max-width: 200px;
     background-color: #ffffff;
@@ -250,12 +272,7 @@ h1 {
 }
 
 .container {
-    position: relative;
-    display: block;
-    top: 30%;
-    left: 100%;
-    margin-bottom: 20px;
-    transform: translateX(-50%);
+    
     padding: 20px;
     background-color: #ffffff;
     border: 1px solid #ccc;

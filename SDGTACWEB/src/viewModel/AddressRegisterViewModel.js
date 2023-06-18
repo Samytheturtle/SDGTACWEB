@@ -3,6 +3,7 @@ import getStatesAxios from "../logic/StateAxios";
 import getSuburbsAxios from "../logic/SuburbAxios";
 import getGeolocation from "../utils/servicesGoogle/GeocoderGoogle";
 import ValidatorAddressForm from '../utils/validation/ValidatorAddressForm.vue';
+import postAddressAxios from "../logic/AddressAxios";
 
 
 export async function getStates (options) {
@@ -137,4 +138,40 @@ export function handleInputChange(name, data){
             data.state
         );
     }
+}
+
+export async function postAddress(userId, zipcode, state, municipality, suburb, street, streetNumber, 
+    apartmentNumber, lat, lng){
+    try{
+        //validar si u es nombre de usuario o telefono
+        //si es nombre de usuario se envia dataUsu, si es telefono se envia dataTel
+        //u es string
+
+        var data = {
+            idUsuario: userId,
+            codigoPostal: zipcode,
+            estado: state,
+            municipio: municipality,
+            colonia: suburb,
+            calle: street,
+            numeroExterior: streetNumber,
+            interior: apartmentNumber,
+            latitud: lat,
+            longitud: lng
+        }
+       
+        let array = [];
+        let promise = postAddressAxios(data);
+    
+        await promise.then(data => {
+            console.log("console(data) desde view model")
+            console.log(data);
+            array = data;
+        });
+        
+        return array;
+    
+        }catch(error){
+            console.log(error);
+        }
 }
