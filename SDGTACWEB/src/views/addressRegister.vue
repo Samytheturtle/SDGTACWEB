@@ -5,13 +5,13 @@
         </div>
 
         <div class="container">
-            <h1>Registro de método de pago</h1>
+            <h1>Registro de dirección de envío</h1>
 
             <form>
                 <CustomSelect
                     name="state"
                     label="*Estado / Entidad federativa:"
-                    @blur="Validate"
+                    @blur="validate"
                     @change="handleChangeState"
                     v-bind:error="validations.state"
                     v-model="state"
@@ -21,7 +21,7 @@
                 <CustomSelect
                     name="municipality"
                     label="*Municipio:"
-                    @blur="Validate"
+                    @blur="validate"
                     @change="handleChangeMunicipality"
                     v-bind:error="validations.municipality"
                     v-model="municipality"
@@ -31,7 +31,7 @@
                 <CustomSelect
                     name="suburb"
                     label="*Colonia:"
-                    @blur="Validate"
+                    @blur="validate"
                     v-bind:error="validations.suburb"
                     v-model="suburb"
                     :options="options.suburbs"
@@ -41,7 +41,7 @@
                     type="number"
                     name="zipcode"
                     label="*Código postal:"
-                    @blur="Validate"
+                    @blur="validate"
                     v-bind:error="validations.zipcode"
                     v-model="zipcode"
                 />
@@ -50,30 +50,32 @@
                     type="text"
                     name="street"
                     label="*Calle:"
-                    @blur="Validate"
+                    @blur="validate"
                     v-bind:error="validations.street"
                     v-model="street"
                 />
 
                 <CustomInput 
-                    type="number" 
+                    type="text" 
                     name="streetNumber" 
                     label="*Número exterior:" 
-                    @blur="Validate" 
+                    @blur="validate" 
                     v-bind:error="validations.streetNumber" 
                     v-model="streetNumber"
                 />
 
                 <CustomInput
-                    type="number"
+                    type="text"
                     name="apartmentNumber"
                     label="Número interior:"
-                    @blur="Validate"
+                    @blur="validate"
                     v-bind:error="validations.apartmentNumber"
                     v-model="apartmentNumber"
                 />
             </form>
-            <CustomButton @click="FindLocation" description="Buscar"/>
+            
+            <CustomButton @click="findLocation" description="Buscar"/>
+
             <CustomGoogleMaps 
                 :disableUI="false" 
                 :zoom="15" 
@@ -83,8 +85,8 @@
                 :geoCoderService="geoCoderService"
             />
             <CustomError :error="validations.map"/>
-            <CustomButton @click="RegisterAddress" description="Registrar"/>
-            <CustomButton @click="Cancel" description="Cancelar"/>
+            <CustomButton @click="registerAddress" description="Registrar"/>
+            <CustomButton @click="cancel" description="Cancelar"/>
         </div>
     </div>
 </template>
@@ -94,14 +96,15 @@ import { ref } from 'vue'
 import CustomButton from '../components/CustomButton.vue';
 import CustomInput from '../components/CustomInput.vue';
 import CustomSelect from '../components/CustomSelect.vue';
-import ValidatorAddressForm from '../utils/validation/ValidatorAddressForm.vue';
 import CustomGoogleMaps from '../components/CustomGoogleMaps.vue';
 import CustomError from '../components/CustomError.vue';
-import getStates from '../viewModel/AddressRegisterViewModel';
 import { 
+    getStates,
     getMunicipalities, 
     getSuburbs,
-    useGeocoder
+    useGeocoder,
+    validateForm,
+    handleInputChange
 } from '../viewModel/AddressRegisterViewModel';
 
 var statesArray = [];
@@ -128,8 +131,8 @@ export default{
     data(){
         return {
             street: '',
-            streetNumber: 0,
-            apartmentNumber: 0,
+            streetNumber: '',
+            apartmentNumber: '',
             zipcode: 0,
             suburb: '',
             municipality: '',
@@ -152,77 +155,23 @@ export default{
         }
     },
     methods:{
-        RegisterAddress(){
-            this.validations.street = ValidatorAddressForm.methods.validateStreet(
-                this.street
-            );
-            this.validations.streetNumber = ValidatorAddressForm.methods.validateStreetNumber(
-                this.streetNumber
-            );
-            this.validations.apartmentNumber = ValidatorAddressForm.methods.validateApartmentNumber(
-                this.apartmentNumber
-            );
-            this.validations.zipcode= ValidatorAddressForm.methods.validateZipcode(
-                this.zipcode
-            );
-            this.validations.suburb = ValidatorAddressForm.methods.validateSuburb(
-                this.suburb
-            );
-            this.validations.municipality = ValidatorAddressForm.methods.validateMunicipality(
-                this.municipality
-            );
-            this.validations.state = ValidatorAddressForm.methods.validateState(
-                this.state
-            );
-            this.validations.map = ValidatorAddressForm.methods.validateLongitude(
-                this.marker.position.lat.toString()
-            );
-            this.validations.map = ValidatorAddressForm.methods.validateLatitude(
-                this.marker.position.lng.toString()
-            );
-
-            const messages = Object.values(this.validations).filter(
-                message => message.length > 0
-            );
+        registerAddress(){
+            const messages = validateForm(this);
 
             if (messages.length === 0) {
                 this.$router.push("/Client-Main-Dash-Board");
+            }else{
+                alert('Llene los campos correctamente.')
             }
         },
-        Validate(event){
+        validate(event){
             const name = event.target.name;
-            if(name === 'street'){
-                this.validations.street = ValidatorAddressForm.methods.validateStreet(this.street);
-            }
-
-            if(name === 'streetNumber'){
-                this.validations.streetNumber = ValidatorAddressForm.methods.validateStreetNumber(this.streetNumber);
-            }
-
-            if(name === 'apartmentNumber'){
-                this.validations.apartmentNumber = ValidatorAddressForm.methods.validateApartmentNumber(this.apartmentNumber);
-            }
-
-            if(name === 'zipcode'){
-                this.validations.zipcode= ValidatorAddressForm.methods.validateZipcode(this.zipcode);
-            }
-
-            if(name === 'suburb'){
-                this.validations.suburb = ValidatorAddressForm.methods.validateSuburb(this.suburb);
-            }
-
-            if(name === 'municipality'){
-                this.validations.municipality = ValidatorAddressForm.methods.validateMunicipality(this.municipality);
-            }
-
-            if(name === 'state'){
-                this.validations.state = ValidatorAddressForm.methods.validateState(this.state);
-            }
+            handleInputChange(name, this);
         },
-        Cancel(){
+        cancel(){
             this.$router.push("/Client-Main-Dash-Board");
         },
-        FindLocation(){
+        findLocation(){
             const location = this.street + ' ' + this.streetNumber + ' ' + 
                 this.zipcode + ' ' + this.municipality + ' ' +
                 this.suburb + ' ' + this.state;

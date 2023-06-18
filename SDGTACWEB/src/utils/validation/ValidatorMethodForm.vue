@@ -8,6 +8,8 @@ export default{
             
             if(validator.isEmpty()){
                 return 'Tipo de tarjeta requerido';
+            }else if(!validator.isCorrectMaxLength(20)){
+                return 'El tipo de tarjeta debe tener menos de 20 caracteres';
             }else{
                 return '';
             }
@@ -18,8 +20,8 @@ export default{
                 return 'Nombre del titular requerido';
             }else if(validator.isWithNumbers()){
                 return 'El nombre del titular no debe contener números';
-            }else if(!validator.isCorrectMaxLength(50)){
-                return 'El nombre del titular debe tener menos de 50 caracteres';
+            }else if(!validator.isCorrectMaxLength(250)){
+                return 'El nombre del titular debe tener menos de 250 caracteres';
             }else{
                 return '';
             }
@@ -28,6 +30,8 @@ export default{
             const validator = Validator(value);
             if(validator.isEmpty()){
                 return 'Número de tarjeta requerido';
+            }else if(!validator.isNumber()){
+                return 'El número de tarjeta debe ser una serie de números';
             }else if(!validator.isCorrectMinLength(12) || !validator.isCorrectMaxLength(19)){
                 return 'El número de tarjeta debe estar entre 12 y 19 dígitos';
             }else{
@@ -39,6 +43,8 @@ export default{
             const firstDigitCard = Math.floor(cardNumber.toString().charAt(0));
             if(validator.isEmpty()){
                 return 'Emisor requerido';
+            }else if(!validator.isCorrectMaxLength(50)){
+                return 'El emisor debe tener menos de 50 caracteres';
             }else if(issuer === "VISA"){
                 if(firstDigitCard !== 4){
                     return "VISA no maneja este número de tarjeta";

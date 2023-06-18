@@ -1,5 +1,5 @@
 export default function getScriptGoogle(){
-    const key = 'AIzaSyDWD9cVLaRJTqLd3trP7h35B_SW1fgGra4';
+    const key = import.meta.env.VITE_APP_GOOGLEMAPS_KEY;
 
     const googleMapScript = document.createElement('script');
     googleMapScript.setAttribute(

@@ -2,10 +2,17 @@
 const numbersRegex = /^(.+?[0-9])|([0-9].+?)$/;
 const passwordWhiteSpaceRegex = /^(.+?[\s])|([\s].+?)$/;
 const passwordLowerCaseRegex = /^(.+?[a-z])|([a-z].+?)$/;
+const upperCaseAllRegex = /^[A-Z]+$/;
 const cvvRegex = /^[0-9]{3,4}$/;
 
 const Validator = (value) =>{
     return {
+        isNumber(){
+            if(Number(value) !== 'isNaN'){
+                return true
+            }
+            return false
+        },
         isEmpty(){
             if(!value){
                 return true
@@ -65,6 +72,12 @@ const Validator = (value) =>{
                 return true
             }
             return false
+        },
+        isUpperCaseAll(){
+            if(upperCaseAllRegex.test(value)){
+                return true;
+            }
+            return false;
         }
     }
 }

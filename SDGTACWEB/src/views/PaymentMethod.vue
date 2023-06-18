@@ -11,7 +11,7 @@
                 <CustomSelect 
                     name="cardType"
                     label="Tipo de tarjeta:"
-                    @blur="Validate"
+                    @blur="validate"
                     v-bind:error="validations.cardType"
                     v-model="cardType"
                     :options="options.cardTypes"
@@ -21,7 +21,7 @@
                     type="text" 
                     name="ownerName" 
                     label="Nombre del titular:" 
-                    @blur="Validate" 
+                    @blur="validate" 
                     v-bind:error="validations.ownerName" 
                     v-model="ownerName"
                 />
@@ -30,7 +30,7 @@
                     type="number"
                     name="cardNumber"
                     label="Número de tarjeta:"
-                    @blur="Validate"
+                    @blur="validate"
                     v-bind:error="validations.cardNumber"
                     v-model="cardNumber"
                 />
@@ -38,7 +38,7 @@
                 <CustomSelect 
                     name="cardIssuer"
                     label="Emisor:"
-                    @blur="Validate"
+                    @blur="validate"
                     v-bind:error="validations.cardIssuer"
                     v-model="cardIssuer"
                     :options="options.cardIssuers"
@@ -48,7 +48,7 @@
                     type="number"
                     name="expirationYear"
                     label="Año de vencimiento:"
-                    @blur="Validate"
+                    @blur="validate"
                     v-bind:error="validations.expirationYear"
                     v-model="expirationYear"
                 />
@@ -57,7 +57,7 @@
                     type="number"
                     name="expirationMonth"
                     label="Mes de vencimiento:"
-                    @blur="Validate"
+                    @blur="validate"
                     v-bind:error="validations.expirationMonth"
                     v-model="expirationMonth"
                 />
@@ -66,13 +66,13 @@
                     type="text"
                     name="cvv"
                     label="CVV:"
-                    @blur="Validate"
+                    @blur="validate"
                     v-bind:error="validations.cvv"
                     v-model="cvv"
                 />
             </form>
-            <CustomButton @click="RegisterMethod" description="Registrar"/>
-            <CustomButton @click="Cancel" description="Cancelar"/>
+            <CustomButton @click="registerMethod" description="Registrar"/>
+            <CustomButton @click="cancel" description="Cancelar"/>
         </div>
     </div>
 </template>
@@ -81,7 +81,10 @@
 import CustomButton from '../components/CustomButton.vue';
 import CustomInput from '../components/CustomInput.vue';
 import CustomSelect from '../components/CustomSelect.vue';
-import ValidatorMethodForm from '../utils/validation/ValidatorMethodForm.vue';
+import { 
+    validateForm,
+    handleInputChange
+} from '../viewModel/PaymentMethodViewModel';
 
 export default{
     data() {
@@ -116,56 +119,21 @@ export default{
         };
     },
     methods: {
-        RegisterMethod() {
-            this.validations.cardType = ValidatorMethodForm.methods.validateCardType(this.cardType);
-            this.validations.ownerName = ValidatorMethodForm.methods.validateName(this.ownerName);
-            this.validations.cardNumber = ValidatorMethodForm.methods.validateCardNumber(this.cardNumber.toString());
-            this.validations.cardIssuer = ValidatorMethodForm.methods.validateIssuer(this.cardIssuer, this.cardNumber);
-            this.validations.expirationYear = ValidatorMethodForm.methods.validateYear(this.expirationYear);
-            this.validations.expirationMonth = ValidatorMethodForm.methods.validateMonth(this.expirationMonth);
-            this.validations.cvv = ValidatorMethodForm.methods.validateCVV(this.cvv);
-            if (this.validations.expirationMonth.length === 0 && this.validations.expirationYear.length === 0) {
-                this.validations.expirationMonth = ValidatorMethodForm.methods.validateExpiration(this.expirationYear, this.expirationMonth);
-                this.validations.expirationYear = ValidatorMethodForm.methods.validateExpiration(this.expirationYear, this.expirationMonth);
-            }
-            if (this.validations.expirationMonth.length === 0) {
-                this.validations.expirationMonth = ValidatorMethodForm.methods.validateExpiration(this.expirationYear, this.expirationMonth);
-            }
-            const messages = Object.values(this.validations).filter(message => message.length > 0);
+        registerMethod() {
+            const messages = validateForm(this);
+
             if (messages.length === 0) {
                 this.$router.push("/Client-Main-Dash-Board");
+            }else{
+                alert('Llene los campos correctamente');
             }
         },
-        Validate(event) {
+        validate(event) {
             const name = event.target.name;
-            if (name === "cardType") {
-                this.validations.cardType = ValidatorMethodForm.methods.validateCardType(this.cardType);
-            }
-            if (name === "ownerName") {
-                this.validations.ownerName = ValidatorMethodForm.methods.validateName(this.ownerName);
-            }
-            if (name === "cardNumber") {
-                this.validations.cardNumber = ValidatorMethodForm.methods.validateCardNumber(this.cardNumber.toString());
-            }
-            if (name === "cardNumber") {
-                this.validations.cardIssuer = ValidatorMethodForm.methods.validateIssuer(this.cardIssuer, this.cardNumber);
-            }
-            if (name === "cardIssuer") {
-                this.validations.cardIssuer = ValidatorMethodForm.methods.validateIssuer(this.cardIssuer, this.cardNumber);
-            }
-            if (name === "expirationYear" || name === "expirationMonth") {
-                this.validations.expirationYear = ValidatorMethodForm.methods.validateYear(this.expirationYear);
-                this.validations.expirationMonth = ValidatorMethodForm.methods.validateMonth(this.expirationMonth);
-                if (this.validations.expirationMonth.length === 0 && this.validations.expirationYear.length === 0) {
-                    this.validations.expirationYear = ValidatorMethodForm.methods.validateExpiration(this.expirationYear, this.expirationMonth);
-                    this.validations.expirationMonth = ValidatorMethodForm.methods.validateExpiration(this.expirationYear, this.expirationMonth);
-                }
-            }
-            if (name === "cvv") {
-                this.validations.cvv = ValidatorMethodForm.methods.validateCVV(this.cvv);
-            }
+            
+            handleInputChange(name, this);
         },
-        Cancel() {
+        cancel() {
             this.$router.push("/Client-Main-Dash-Board");
         }
     },

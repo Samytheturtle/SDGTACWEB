@@ -39,6 +39,11 @@ const router = createRouter({
       component: () => import('../views/AddressRegister.vue')
     },
     {
+      path: '/Statement-Register-Form',
+      name: 'STATREGISTER',
+      component: () => import('../views/StatementsRegister.vue')
+    },
+    {
       path:  '/Administrator-Main-Dash-Board',
       name: 'ADMMDB',
       component: () => import('../views/ADMMaindashboard.vue')

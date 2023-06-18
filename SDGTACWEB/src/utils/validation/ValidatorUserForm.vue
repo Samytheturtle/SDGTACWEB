@@ -7,6 +7,8 @@ export default{
             const validator = Validator(value);
             if(validator.isEmpty()){
                 return 'Tipo de usuario requerido';
+            }else if(validator.isNumber()){
+                return 'El tipo de usuario no tiene el formato correcto';
             }else{
                 return '';
             }
@@ -45,6 +47,10 @@ export default{
             const validator = Validator(value);
             if(validator.isEmpty()){
                 return 'Sucursal requerida';
+            }else if(validator.isNumber()){
+                return 'La sucursal no tiene el formato correcto';
+            }else{
+                return '';
             }
         },
         validatePassword(value){
@@ -53,8 +59,8 @@ export default{
                 return 'Contraseña requerida';
             }else if(validator.isPasswordWithWhitespace()){
                 return 'La contraseña no debe tener espacios en blanco';
-            }else if(!validator.isCorrectMaxLength(30) || !validator.isCorrectMinLength(6)){
-                return 'La contraseña debe estar entre 6 y 30 caracteres';
+            }else if(!validator.isCorrectMaxLength(20) || !validator.isCorrectMinLength(6)){
+                return 'La contraseña debe estar entre 6 y 20 caracteres';
             }else if(!validator.isPasswordWithLowerCase()){
                 return 'La contraseña debe tener al menos una letra minúscula';
             }else if(!validator.isWithNumbers()){

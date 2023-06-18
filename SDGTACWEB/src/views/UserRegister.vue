@@ -8,20 +8,20 @@
             <h1>Registro de usuario</h1>
 
             <form>
-                <CustomInput
-                    type="text"
+                <CustomSelect
                     name="userType"
                     label="Cargo:"
-                    @blur="Validate"
+                    @blur="validate"
                     v-bind:error="validations.userType"
                     v-model="userType"
+                    :options="options.userTypes"
                 />
 
                 <CustomInput 
                     type="text"
                     name="fullName"
                     label="Nombre completo:"
-                    @blur="Validate"
+                    @blur="validate"
                     v-bind:error="validations.fullName"
                     v-model="fullName"
                 />
@@ -30,15 +30,15 @@
                     type="date"
                     name="registerDate"
                     label="Fecha de ingreso:"
-                    @blur="Validate"
+                    @blur="validate"
                     v-bind:error="validations.registerDate"
                     v-model="registerDate"
                 />
 
                 <CustomSelect 
                     name="branch"
-                    label="Emisor:"
-                    @blur="Validate"
+                    label="Sucursal:"
+                    @blur="validate"
                     v-bind:error="validations.branch"
                     v-model="branch"
                     :options="options.branches"
@@ -48,7 +48,7 @@
                     type="text"
                     name="username"
                     label="Usuario:"
-                    @blur="Validate"
+                    @blur="validate"
                     v-bind:error="validations.username"
                     v-model="username"
                 />
@@ -57,7 +57,7 @@
                     type="password"
                     name="password"
                     label="Contraseña:"
-                    @blur="Validate"
+                    @blur="validate"
                     v-bind:error="validations.password"
                     v-model="password"
                 />
@@ -66,13 +66,13 @@
                     type="password"
                     name="confirmedPassword"
                     label="Confirmar contraseña:"
-                    @blur="Validate"
+                    @blur="validate"
                     v-bind:error="validations.confirmedPassword"
                     v-model="confirmedPassword"
                 />
             </form>
-            <customButton @click="RegisterUser" description="Registrar"/>
-            <CustomButton @click="Cancel" description="Cancelar"/>
+            <customButton @click="registerUser" description="Registrar"/>
+            <CustomButton @click="cancel" description="Cancelar"/>
         </div>
     </div>
 </template>
@@ -81,17 +81,20 @@
 import CustomButton from '../components/CustomButton.vue';
 import CustomInput from '../components/CustomInput.vue';
 import CustomSelect from '../components/CustomSelect.vue';
-import ValidatorUserForm from '../utils/validation/ValidatorUserForm.vue';
+import { 
+    validateForm,
+    handleInputChange
+} from '../viewModel/UserRegisterViewModel';
 
 const dateNow = new Date().toISOString().split('T')[0];
 
 export default{
     data() {
         return {
-            userType: "",
+            userType: null,
             fullName: "",
             registerDate: dateNow,
-            branch: "",
+            branch: null,
             username: "",
             password: "",
             confirmedPassword: "",
@@ -105,49 +108,28 @@ export default{
                 confirmedPassword: "",
             },
             options:{
-                branches: []
+                branches: [],
+                userTypes: []
             }
         };
     },
     methods: {
-        RegisterUser() {
-            this.validations.userType = ValidatorUserForm.methods.validateUserType(this.userType);
-            this.validations.fullName = ValidatorUserForm.methods.validateName(this.fullName);
-            this.validations.registerDate = ValidatorUserForm.methods.validateDate(this.registerDate);
-            this.validations.branch = ValidatorUserForm.methods.validateBranch(this.branch);
-            this.validations.username = ValidatorUserForm.methods.validateUsername(this.username);
-            this.validations.password = ValidatorUserForm.methods.validatePassword(this.password);
-            this.validations.confirmedPassword = ValidatorUserForm.methods.confirmPassword(this.password, this.confirmedPassword);
-            const messages = Object.values(this.validations).filter(message => message.length > 0);
+        registerUser() {
+            const messages = validateForm(this);
+
             if (messages.length === 0) {
                 this.$router.push("/Client-Main-Dash-Board");
+            }else{
+                alert('Llene los campos correctamente');
             }
         },
-        Validate(event) {
+        validate(event) {
             const name = event.target.name;
-            if (name === "userType") {
-                this.validations.userType = ValidatorUserForm.methods.validateUserType(this.userType);
-            }
-            if (name === "fullName") {
-                this.validations.fullName = ValidatorUserForm.methods.validateName(this.fullName);
-            }
-            if (name === "registerDate") {
-                this.validations.registerDate = ValidatorUserForm.methods.validateDate(this.registerDate);
-            }
-            if (name === "branch") {
-                this.validations.branch = ValidatorUserForm.methods.validateBranch(this.branch);
-            }
-            if (name === "username") {
-                this.validations.username = ValidatorUserForm.methods.validateUsername(this.username);
-            }
-            if (name === "password") {
-                this.validations.password = ValidatorUserForm.methods.validatePassword(this.password);
-            }
-            if (name === "confirmedPassword") {
-                this.validations.confirmedPassword = ValidatorUserForm.methods.confirmPassword(this.password, this.confirmedPassword);
-            }
+            
+            handleInputChange(name, data);
         },
-        Cancel() {
+        cancel() {
+            this.$router.push("/Administrator-Main-Dash-Board");
         }
     },
     components: { CustomInput, CustomSelect, CustomButton }
