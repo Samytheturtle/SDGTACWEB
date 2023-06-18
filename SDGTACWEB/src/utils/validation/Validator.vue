@@ -2,7 +2,7 @@
 const numbersRegex = /^(.+?[0-9])|([0-9].+?)$/;
 const passwordWhiteSpaceRegex = /^(.+?[\s])|([\s].+?)$/;
 const passwordLowerCaseRegex = /^(.+?[a-z])|([a-z].+?)$/;
-const upperCaseAllRegex = /^[A-Z]+$/;
+const upperCaseAllRegex = /^[A-Z\s]+$/;
 const cvvRegex = /^[0-9]{3,4}$/;
 
 const Validator = (value) =>{
