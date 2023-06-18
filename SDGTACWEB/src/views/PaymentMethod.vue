@@ -83,10 +83,19 @@ import CustomInput from '../components/CustomInput.vue';
 import CustomSelect from '../components/CustomSelect.vue';
 import { 
     validateForm,
-    handleInputChange
+    handleInputChange,
+    postPaymentMethod
 } from '../viewModel/PaymentMethodViewModel';
 
+var respuesta = [];
+
 export default{
+    setup(){
+        let userId = 4; //OBTENER DE ALGÚN MODO EL ID DEL CLIENTE QUE INICIÓ SESIÓN Y COLOCARLO AQUÍ AL ABRIR LA VENTANA.
+        return {
+            userId
+        }
+    },
     data() {
         return {
             type: null,
@@ -119,11 +128,25 @@ export default{
         };
     },
     methods: {
-        registerMethod() {
+        async registerMethod() {
             const messages = validateForm(this);
 
             if (messages.length === 0) {
-                this.$router.push("/Client-Main-Dash-Board");
+                //Haciendo POST con Axios
+                const promise = postPaymentMethod(this.userId, this.ownerName, this.cardType, this.cardNumber, 
+                this.cardIssuer, this.expirationYear, this.expirationMonth, this.cvv);
+                
+                //Comprobando Respuesta
+                await promise.then(array => respuesta = array);
+                console.log("Respuesta: ");
+                console.log(respuesta)
+
+                if(respuesta.affectedRows == 1){
+                    alert("¡Se registró el método de pago!");
+                    
+                }else{
+                    alert("No se registro el método de pago");
+                }
             }else{
                 alert('Llene los campos correctamente');
             }

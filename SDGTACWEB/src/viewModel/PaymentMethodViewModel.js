@@ -1,4 +1,5 @@
 import ValidatorMethodForm from '../utils/validation/ValidatorMethodForm.vue';
+import postPaymentMethodAxios from '../logic/PaymentMethodAxios.js';
 
 export function validateForm(data){
     data.validations.cardType = ValidatorMethodForm.methods.validateCardType(
@@ -93,5 +94,34 @@ export function handleInputChange(name, data){
         data.validations.cvv = ValidatorMethodForm.methods.validateCVV(
             data.cvv
         );
+    }
+}
+
+export async function postPaymentMethod(userId, ownerName, cardType, cardNumber, cardIssuer, 
+    expirationYear, expirationMonth, cvv){
+    try{
+        var data = {
+            idUsuario: userId,
+            nombreTitular: ownerName,
+            tipoTarjeta: cardType,
+            numero: cardNumber,
+            emisor: cardIssuer,
+            anio: expirationYear,
+            mes: expirationMonth, 
+            cvv: cvv
+        }
+    
+        let array = [];
+        let promise = postPaymentMethodAxios(data);
+
+        await promise.then(data => {
+            console.log(data);
+            array = data;
+        });
+        
+        return array;
+
+    }catch(error){
+        console.log(error);
     }
 }

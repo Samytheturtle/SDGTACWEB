@@ -143,10 +143,6 @@ export function handleInputChange(name, data){
 export async function postAddress(userId, zipcode, state, municipality, suburb, street, streetNumber, 
     apartmentNumber, lat, lng){
     try{
-        //validar si u es nombre de usuario o telefono
-        //si es nombre de usuario se envia dataUsu, si es telefono se envia dataTel
-        //u es string
-
         var data = {
             idUsuario: userId,
             codigoPostal: zipcode,
