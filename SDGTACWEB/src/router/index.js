@@ -47,6 +47,11 @@ const router = createRouter({
       path:  '/Administrator-Main-Dash-Board',
       name: 'ADMMDB',
       component: () => import('../views/ADMMaindashboard.vue')
+    },
+    {
+      path: '/Ejecutivo-Main-Dash-Board',
+      name: 'EJV',
+      component: ()=>import('../views/EJVMaindasboard.vue')
     }
   ]
 })
