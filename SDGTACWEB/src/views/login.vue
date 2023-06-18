@@ -27,12 +27,8 @@ import { ref } from 'vue'
 import useLogin from '../viewModel/loginViewModel'
 
 var respuesta = [];
-let jsontest = {
-  "nombreUsuario ": "" ,
-  "telefono": "",
-  "contrasena": ""
-}
-export default {
+
+  export default {
   data() {
     return {
       username: '',
@@ -40,14 +36,36 @@ export default {
     };
   },
   methods: {
-    login() {
+    async login() {
+      
+      const promise = useLogin(this.username, this.password);
+      await promise.then(array => respuesta = array);
+
+      //useLogin(this.username, this.password);
+      //console.log(res);
+      if(respuesta.message == "authenticated user"){
+        
       //consume el servicio de login
-      useLogin(this.username, this.password)
       
-      alert("Usuario: " + this.username + "\nContraseña: " + this.password);
-      // Redirige a la página de inicio de sesión exitosa
+          if(respuesta.tipoUsuario == 1 ){
+            alert("tipo 1 - Admin");
+            this.$router.push('/Admin-Main-Dash-Board')
+          }else if(respuesta.tipoUsuario == 2){
+            alert("tipo 2 - repartidor");
+            //this.$router.push('/Employee-Main-Dash-Board')
+          }else if(respuesta.tipoUsuario == 3){
+            alert("tipo 3 - ejecutivo venta");
+          
+          }else{
+            //alert("Usuario: " + this.username + "\nContraseña: " + this.password);
+            // Redirige a la página de inicio de sesión exitosa
+          
+            this.$router.push('/Client-Main-Dash-Board');
+          }
+      }
+
       
-      this.$router.push('/Client-Main-Dash-Board')
+      
     },
     register() {
       alert("Redirigiendo a la página de registro...");
@@ -56,6 +74,7 @@ export default {
     },
   },
 };
+
 </script>
 
 <style>
