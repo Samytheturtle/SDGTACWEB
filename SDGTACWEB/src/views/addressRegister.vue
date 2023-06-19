@@ -181,7 +181,7 @@ export default{
 
                 if(respuesta.idUsuario == this.userId){
                     alert("¡Se registró el domicilio!");
-                    
+                    this.$router.push("/Client-Main-Dash-Board");             
                 }else{
                     alert("No se registro el domicilio");
                 }
@@ -205,7 +205,7 @@ export default{
             useGeocoder(objectLocation, this.geoCoderService, this.marker)
 
         },
-        async handleChangeState(event){
+        async handleChangeState(event){ //Actualizando la lista de estados y municipios
             this.options.municipalities = [];
             const state = statesArray.find(state => 
                 state.ESTADO === this.state
@@ -233,6 +233,7 @@ export default{
     async mounted(){
         const promise = getStates(this.options);
         await promise.then(array => statesArray = array);
+        console.log(statesArray);
     },
     components:{ CustomInput, CustomButton, CustomSelect, CustomGoogleMaps, CustomError }
 }

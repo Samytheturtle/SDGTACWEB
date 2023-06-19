@@ -143,7 +143,7 @@ export default{
 
                 if(respuesta.affectedRows == 1){
                     alert("¡Se registró el método de pago!");
-                    
+                    this.$router.push("/Client-Main-Dash-Board");
                 }else{
                     alert("No se registro el método de pago");
                 }
