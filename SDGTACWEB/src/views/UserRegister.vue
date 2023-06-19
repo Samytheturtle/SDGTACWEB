@@ -129,8 +129,6 @@ export default{
     methods: {
         async registerUser() {
             const messages = validateForm(this);
-            console.log("branch"+this.branch);
-            console.log("userType"+this.userType);
             if (messages.length === 0) {
                 //Haciendo POST con Axios
                 const promise = postUser(this.userType, this.fullName, this.registerDate, this.username, this.password, this.branch);
@@ -141,7 +139,7 @@ export default{
 
                 if(respuesta.affectedRows == 1){
                     alert("¡Se registró el usuario!")
-                    //this.$router.push("/Administrator-Main-Dash-Board");
+                    this.$router.push("/Administrador-Main-Dash-Board");
                 }else{
                     console.log("No se registró el usuario");
                 }           

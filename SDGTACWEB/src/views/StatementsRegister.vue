@@ -73,8 +73,11 @@ import CustomError from '../components/CustomError.vue';
 import { 
     validateForm,
     handleInputChange,
-    useGeocoder
+    useGeocoder,
+    postBranch
 } from '../viewModel/StatementsRegisterViewModel';
+
+var respuesta = [];
 
 export default{
     setup(){
@@ -108,11 +111,25 @@ export default{
         }
     },
     methods:{
-        registerBranch(){
+        async registerBranch(){
             const messages = validateForm(this);
 
             if(messages.length === 0){
+                //Haciendo POST con Axios
+                const promise = postBranch(this.name, this.address, this.marker.position.lat, this.marker.position.lng,
+                 this.scheduleWeek, this.scheduleWeekend);
+                
+                //Comprobando Respuesta
+                await promise.then(array => respuesta = array);
+                console.log("Respuesta: ");
+                console.log(respuesta);
 
+                if(respuesta.affectedRows == 1){
+                    alert("¡Se registró la sucursal!");
+                    this.$router.push("/Administrador-Main-Dash-Board");             
+                }else{
+                    alert("No se registró la sucursal");
+                }
             }else{
                 alert('Llene los campos correctamente');
             }

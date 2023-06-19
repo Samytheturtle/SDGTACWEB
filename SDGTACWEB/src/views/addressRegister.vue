@@ -177,13 +177,13 @@ export default{
                 //Comprobando Respuesta
                 await promise.then(array => respuesta = array);
                 console.log("Respuesta: ");
-                console.log(respuesta)
+                console.log(respuesta);
 
                 if(respuesta.idUsuario == this.userId){
                     alert("¡Se registró el domicilio!");
                     this.$router.push("/Client-Main-Dash-Board");             
                 }else{
-                    alert("No se registro el domicilio");
+                    alert("No se registró el domicilio");
                 }
                 
             }else{

@@ -1,5 +1,6 @@
-import ValidatorBranchForm from '../utils/validation/ValidatorBranchForm.vue'
+import ValidatorBranchForm from '../utils/validation/ValidatorBranchForm.vue';
 import getGeolocation from "../utils/servicesGoogle/GeocoderGoogle";
+import postBranchAxios from "../logic/PostBranchAxios";
 
 export function validateForm(data){
     data.validations.address = ValidatorBranchForm.methods.validateAddress(
@@ -56,4 +57,30 @@ export function handleInputChange(name, data){
 
 export function useGeocoder(location, geoCoderService, marker){
     getGeolocation(location, geoCoderService, marker);
+}
+
+export async function postBranch(name, address, lat, lng, scheduleWeek, scheduleWeekend){
+    try{
+        var data = {
+            nombreComercial: name,
+            direccion: address,
+            latitud: lat,
+            longitud: lng,
+            horarioLunesviernes: scheduleWeek,
+            horarioFinDeSemana: scheduleWeekend
+        }
+       
+        let array = [];
+        let promise = postBranchAxios(data);
+    
+        await promise.then(data => {
+            console.log(data);
+            array = data;
+        });
+        
+        return array;
+    
+    }catch(error){
+        console.log(error);
+    }
 }
