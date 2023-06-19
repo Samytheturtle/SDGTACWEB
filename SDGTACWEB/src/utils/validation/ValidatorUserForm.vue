@@ -7,7 +7,7 @@ export default{
             const validator = Validator(value);
             if(validator.isEmpty()){
                 return 'Tipo de usuario requerido';
-            }else if(validator.isNumber()){
+            }else if(!validator.isNumber()){
                 return 'El tipo de usuario no tiene el formato correcto';
             }else{
                 return '';
@@ -47,7 +47,7 @@ export default{
             const validator = Validator(value);
             if(validator.isEmpty()){
                 return 'Sucursal requerida';
-            }else if(validator.isNumber()){
+            }else if(!validator.isNumber()){
                 return 'La sucursal no tiene el formato correcto';
             }else{
                 return '';

@@ -177,13 +177,13 @@ export default{
                 //Comprobando Respuesta
                 await promise.then(array => respuesta = array);
                 console.log("Respuesta: ");
-                console.log(respuesta)
+                console.log(respuesta);
 
                 if(respuesta.idUsuario == this.userId){
                     alert("¡Se registró el domicilio!");
-                    
+                    this.$router.push("/Client-Main-Dash-Board");             
                 }else{
-                    alert("No se registro el domicilio");
+                    alert("No se registró el domicilio");
                 }
                 
             }else{
@@ -205,7 +205,7 @@ export default{
             useGeocoder(objectLocation, this.geoCoderService, this.marker)
 
         },
-        async handleChangeState(event){
+        async handleChangeState(event){ //Actualizando la lista de estados y municipios
             this.options.municipalities = [];
             const state = statesArray.find(state => 
                 state.ESTADO === this.state
@@ -247,6 +247,7 @@ body {
     align-items: center;
     margin: 0;
     padding: 0;
+    background-image: url("../assets/BackgrownLogin.jpg");
 }
 
 .logoRG {

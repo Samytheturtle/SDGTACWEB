@@ -1,4 +1,6 @@
 import ValidatorUserForm from '../utils/validation/ValidatorUserForm.vue';
+import getAllBranchAxios from '../logic/BranchAxios.js';
+import postUserAxios from '../logic/UserAxios.js';
 
 export function validateForm(data){
     data.validations.userType = ValidatorUserForm.methods.validateUserType(
@@ -67,5 +69,46 @@ export function handleInputChange(name, data){
             data.password, 
             data.confirmedPassword
         );
+    }
+}
+
+export async function getAllBranch(options){
+    let array = [];
+    let promise = getAllBranchAxios();
+
+    await promise.then(data => {
+        array = data; //Se obtiene directamente el arreglo de sucursales
+        array.forEach(branch => {
+            options.branches.push({
+                value: branch.idSucursal,
+                label: branch.nombreComercial
+            });
+        });
+    });   
+    return array;
+}
+
+export async function postUser(userType, fullName, registerDate, username, password, branch){
+    try{
+        var data = {
+            tipoUsuario: userType,
+            nombreCompleto: fullName,
+            fechaIngreso: registerDate,
+            nombreusuario: username,
+            contrasena: password,
+            idSucursal: branch
+        }
+       
+        let array = [];
+        let promise = postUserAxios(data);
+    
+        await promise.then(data => {
+            array = data;
+        });
+        
+        return array;
+    
+    }catch(error){
+        console.log(error);
     }
 }
