@@ -6,6 +6,7 @@
         <button @click="salir">Salir</button>
     </div>
     <div class="container-table" id="table-branch">
+        <CustomButton @click="registerBranch" description="Registrar"/>
         <DataTable 
             :options="optionsTable"
             class="table table-hover table-borderless"
@@ -16,6 +17,7 @@
         />
     </div>
     <div class="container-table" id="table-user" hidden>
+        <CustomButton @click="registerUser" description="Registrar"/>
         <DataTable 
             :options="optionsTable"
             class="table table-hover table-borderless"
@@ -26,6 +28,7 @@
         />
     </div>
     <div class="container-table" id="table-product" hidden>
+        <CustomButton @click="registerProduct" description="Registrar"/>
         <DataTable 
             :options="optionsTable"
             class="table table-hover table-borderless"
@@ -90,82 +93,95 @@ export default{
         const users = ref([]);
         const branches = ref([]);
         const products = ref([]);
-        const columnsBranch = [
-            {
-                branches: 'nombreComercial',
-                title: 'Nombre comercial'
-            },
-            {
-                branches: 'direccion',
-                title: 'Dirección'
-            },
-            {
-                branches: 'horarioLunesViernes',
-                title: 'Horario de Lunes a Viernes'
-            },
-            {
-                branches: 'horarioFinDeSemana',
-                title: 'Horario de fin de semana'
-            }
-        ];
-
-        const columnsUser = [
-            {
-                users: 'tipoUsuario',
-                title: 'Tipo de usuario'
-            },
-            {
-                users: 'nombreCompleto',
-                title: 'Nombre completo'
-            },
-            {
-                users: 'fechaIngreso',
-                title: 'Fecha de ingreso'
-            },
-            {
-                users: 'idSucursal',
-                title: 'Sucursal'
-            }
-        ];
-
-        const columnsProduct = [
-            {
-                products: 'nombre',
-                title: 'Nombre',
-            },
-            {
-                products: 'idCategoria',
-                title: 'Categoría',
-            },
-            {
-                products: 'descripcion',
-                title: 'Descripción',
-            },
-            {
-                products: 'existencias',
-                title: 'Existencias',
-            },
-            {
-                products: 'precio',
-                title: 'Precio',
-            },
-            {
-                products: 'codigoBarras',
-                title: 'Código de barras'
-            }
-        ]
-        return{
+        
+        return {
             users,
             branches,
-            products,
-            columnsBranch,
-            columnsUser,
-            columnsProduct
+            products
         }
     },
     data(){
         return{
-            optionsTable: options
+            optionsTable: options,
+            columnsBranch: [
+                {
+                    branches: 'nombreComercial',
+                    title: 'Nombre comercial'
+                },
+                {
+                    branches: 'direccion',
+                    title: 'Dirección'
+                },
+                {
+                    branches: 'horarioLunesViernes',
+                    title: 'Horario de Lunes a Viernes'
+                },
+                {
+                    branches: 'horarioFinDeSemana',
+                    title: 'Horario de fin de semana'
+                }
+            ],
+            columnsProduct: [
+                {
+                    products: 'nombre',
+                    title: 'Nombre',
+                },
+                {
+                    //products: null,
+                    products: 'idCategoria',
+                    title: 'Categoría',
+                    /*render: function(data, type, row, meta){
+                        let users
+                    }*/
+                },
+                {
+                    products: 'descripcion',
+                    title: 'Descripción',
+                },
+                {
+                    products: 'existencias',
+                    title: 'Existencias',
+                },
+                {
+                    products: null,
+                    title: 'Precio',
+                    render: function(data, type, row, meta){
+                        return (`$` + new Intl.NumberFormat('es-mx').format(data.precio));
+                    }
+                },
+                {
+                    products: 'codigoBarras',
+                    title: 'Código de barras'
+                }
+            ],
+            columnsUser: [
+                {
+                    //users: null,
+                    users: 'tipoUsuario',
+                    title: 'Tipo de usuario',
+                    /*render: function(data, type, row, meta){
+                        let that = this;
+                        globalThis.u
+                        return getUserType(data.tipoUsuario);
+                    }*/
+                },
+                {
+                    users: 'nombreCompleto',
+                    title: 'Nombre completo'
+                },
+                {
+                    users: 'fechaIngreso',
+                    title: 'Fecha de ingreso'
+                },
+                {
+                    //users: null,
+                    users: 'idSucursal',
+                    title: 'Sucursal',
+                    /*render: function (data, type, row, meta){
+                        
+                    }*/
+                }
+            ]
         }
     },
     methods:{
@@ -204,7 +220,22 @@ export default{
         },
         getCategory(categoryId){
             //buscar en la tabla categoria
+        },
+        registerBranch(){
+            this.$router.push('/Branch-Register-Form');
+        },
+        registerUser(){
+            this.$router.push('/User-Register-Form');
+        },
+        registerProduct(){
+            this.$router.push(''); //falta colocar ruta del registro del usuario
         }
+    },
+    mounted(){
+        //los resultados deben ser listas
+        //guardar en users el resultado obtenido de axios con Usuarios
+        //guardar en branches el resultado obtenido de axios con Sucursales
+        //guardar en products el resultado obtenido de axios con Productos
     },
     components: { CustomButton, CustomButton, DataTable }
 }

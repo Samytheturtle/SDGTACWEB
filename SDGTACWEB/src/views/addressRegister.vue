@@ -233,7 +233,6 @@ export default{
     async mounted(){
         const promise = getStates(this.options);
         await promise.then(array => statesArray = array);
-        console.log(statesArray);
     },
     components:{ CustomInput, CustomButton, CustomSelect, CustomGoogleMaps, CustomError }
 }
