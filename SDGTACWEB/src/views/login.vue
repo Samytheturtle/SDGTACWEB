@@ -60,7 +60,7 @@ var respuesta = [];
             //alert("Usuario: " + this.username + "\nContraseña: " + this.password);
             // Redirige a la página de inicio de sesión exitosa
           
-            this.$router.push('/Client-Main-Dash-Board');
+            this.$router.push('/Client-Main-Dash-Board', promise);
           }
       }
 
