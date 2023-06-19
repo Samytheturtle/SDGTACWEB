@@ -1,53 +1,99 @@
 <template>
-  <div class="containerCLIMDB">
+  <div>
     <div class="headerCLIMDB">
       <img src="../assets/logo_cuevas.png" alt="Logo de la empresa" class="logoCLI" />
       <div class="header-buttonsCLIMDB">
+        <div class="header-info">
+          <label>{{ userName }} - {{ userType }}</label>
+        </div>
         <button @click="addDeliveryAddress">Agregar Dirección</button>
         <button @click="addPaymentMethod">Agregar Método de Pago</button>
         <button @click="logout">Salir</button>
       </div>
     </div>
 
-    <div class="contentCLIMDB">
+    <div class="container">
+      <div class="cart-box">
+          <img src="../assets/cart_icon.png" alt="Icono de carrito" class="cart-icon" />
+          <label>{{ cartCount }}</label>
+      </div>
       <div class="tabs1">
         <div
           class="tab"
-          :class="{ active: activeTab === 'catalog' }"
-          @click="changeTab('catalog')"
+          :class="{ active: activeTab === 'catalogo' }"
+          @click="changeTab('catalogo')"
         >
           Consultar Catálogo de Productos
         </div>
         <div
           class="tab"
-          :class="{ active: activeTab === 'cart' }"
-          @click="changeTab('cart')"
+          :class="{ active: activeTab === 'carrito' }"
+          @click="changeTab('carrito')"
         >
           Consultar Carrito de Compras
         </div>
         <div
           class="tab"
-          :class="{ active: activeTab === 'orders' }"
-          @click="changeTab('orders')"
+          :class="{ active: activeTab === 'pedidos' }"
+          @click="changeTab('pedidos')"
         >
           Visualizar Lista de Pedidos
-        </div>
+        </div>        
       </div>
-      <div class="tab-contentCLIMDB">
+    </div>
+    <div class="tab-content">
         <template v-if="activeTab === 'catalogo'">
           <h2>Consultar Catálogo de Productos</h2>
-          <!-- Aquí puedes mostrar el catálogo de productos -->
+
+          <div class="category-list">
+            <div v-for="category in categories" :key="category.id" class="category-card" @click="generateProducts(category.id)">
+              <img :src="category.image" alt="Imagen del categoria" class="category-image" />
+              <h3>{{ category.name }}</h3>
+            </div>
+          </div>
+
+          <div class="product-list">
+            <div v-for="product in catalogProducts" :key="product.id" class="product-card">
+              <img :src="product.image" alt="Imagen del producto" class="product-image" />
+              <h3>{{ product.name }}</h3>
+              <p class="product-price">{{ product.price }}</p>
+              <p>{{ product.description }}</p>
+              <button @click="addToCart">Agregar al carrito</button> 
+            </div>
+          </div>
+
         </template>
         <template v-if="activeTab === 'carrito'">
-          <h2>Consultar Carrito de Compras</h2>
-          <!-- Aquí puedes mostrar el contenido del carrito de compras -->
+          <h2>Lista del carrito de compras</h2>
+          <br />
+          <div class="carrito-info">
+            <div class="carrito-details">
+              <label>Cantidad de artículos: {{ cartQuantity }}</label>
+              <label>Total a pagar: ${{ cartTotal.toFixed(2) }}</label>
+            </div>
+            
+            <div class="carrito-buttons">
+              <button @click="payCart">Pagar</button>
+              <button @click="deleteCart">Borrar Carrito</button>
+            </div>
+            <div class="product-list-car">
+              <div v-for="productCar in cartProducts" :key="productCar.id" class="product-car-card" >
+                <img :src="productCar.image" alt="Imagen del producto" class="product-car-image" />
+                <h3>{{ productCar.name }}</h3>
+                <p class="product-price">{{ productCar.price }}</p>
+                <p>{{ productCar.description }}</p>
+                <p>Cantidad: {{ productCar.quantity }}</p>
+                <button @click="removeFromCart(productCar)">Eliminar</button>
+              </div>
+          </div>          
+          </div>
         </template>
         <template v-if="activeTab === 'pedidos'">
           <h2>Visualizar Lista de Pedidos</h2>
           <!-- Aquí puedes mostrar la lista de pedidos -->
         </template>
-      </div>
-    </div>
+    </div>    
+
   </div>
 </template>
 
@@ -55,8 +101,22 @@
 export default {
   data() {
     return {
-      activeTab: 'catalog', // Tab activo por defecto
+      userName: "Nombre de usuario",
+      userType: "Tipo de usuario",
+      cartCount: 0,
+      cartQuantity: 0,
+      cartTotal: 0.0,
+      activeTab: "catalogo",
+      catalogProducts: [],
+      categories: [],
+      cartProducts: [],
     };
+  },mounted() {
+  // Ejemplo de llamada al método para generar 5 tarjetas
+  
+  this.catalogProducts = this.createProductCards();
+  this.categories= this.createCategoryCards();
+  this.cartProducts= this.createProductCardsCarrito();
   },
   methods: {
     changeTab(tab) {
@@ -71,28 +131,123 @@ export default {
     logout() {
       // Lógica para cerrar sesión
       // Redirige al cliente a la página de inicio de sesión
-      this.$router.push('/');
+      this.$router.push("/");
+    },
+    payCart() {
+      alert("Carrito pagado correctamente");
+      this.cartQuantity = 0;
+      this.cartTotal = 0;
+    },
+    deleteCart() {
+      alert("Carrito borrado correctamente");
+      this.cartQuantity = 0;
+      this.cartTotal = 0;
+      this.cartCount= 0;
+      this.cartProducts = [];
+    },createProductCards(quantity) {
+      const countProducts=5;
+      const cards = [];
+      for (let i = 0; i < countProducts; i++) {
+        const product = {
+          id: i + 1,
+          name: `Producto ${i + 1}`,
+          image: `../assets/product${i + 1}.png`,
+          price: `$${(Math.random() * 50).toFixed(2)}`,
+          description: `Descripción del Producto ${i + 1}`,
+        };
+        cards.push(product);
+      }
+      return cards;
+    },createCategoryCards(quantity) {
+      const countProducts=5;
+      const cards = [];
+      for (let i = 0; i < countProducts; i++) {
+        const category = {
+          id: i + 1,
+          name: `Categoria: ${i + 1}`,
+          image: `../assets/product${i + 1}.png`,
+        };
+        cards.push(category);
+      }
+      return cards;
+    },createProductCardsCarrito(quantity) {
+      const countRecobery=10;
+      this.cartCount =countRecobery;
+      const cards = [];
+      for (let i = 0; i < this.cartCount; i++) {
+        const productCar = {
+          id: i + 1,
+          name: `Producto ${i + 1}`,
+          image: `../assets/product${i + 1}.png`,
+          price: `$${(Math.random() * 50).toFixed(2)}`,
+          description: `Descripción del Producto ${i + 1}`,
+          quantity: i,
+        };
+        cards.push(productCar);
+      }
+      return cards;
+    },addToCart() {
+      this.cartCount += 1; // Incrementar el valor de cartCount en 1
+      console.log(this.cartCount);
+      this.cartProducts = this.generateCarProduct(this.cartCount);
+
+    },generateProducts(categoryId) {
+      const minQuantity = 5;
+      const maxQuantity = 20;
+      const quantity = Math.floor(Math.random() * (maxQuantity - minQuantity + 1) + minQuantity);
+
+      const selectedCategory = this.categories.find((category) => category.id === categoryId);
+
+      if (selectedCategory) {
+        const newProducts = [];
+        for (let i = 0; i < quantity; i++) {
+          const product = {
+            id: this.catalogProducts.length + i + 1,
+            name: `Producto ${this.catalogProducts.length + i + 1}`,
+            image: `../assets/product${i + 1}.png`,
+            price: selectedCategory.id,
+            description: `Descripción del Producto ${this.catalogProducts.length + i + 1}`,
+          };
+          newProducts.push(product);
+        }
+
+        this.catalogProducts = newProducts;
+        this.selectedCategory = selectedCategory;
+        
+        console.log(this.selectedCategory = selectedCategory);
+        console.log( this.catalogProducts = newProducts);
+      }
+    },generateCarProduct(quantity) {
+        console.log(quantity);
+        const newProductCar = [];
+        for (let i = 0; i < quantity; i++) {
+          const productCar = {
+            id: i + 1,
+            name: `Producto ${i + 1}`,
+            image: `../assets/product${i + 1}.png`,
+            price: `$${(Math.random() * 50).toFixed(2)}`,
+            description: `Descripción del Producto ${i + 1}`,
+            quantity: i,
+          };
+          newProductCar.push(productCar);
+        }
+        this.cartProducts = newProductCar;
+        console.log(this.cartProducts = newProductCar);
     },
   },
 };
 </script>
+
 <style>
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f7e1e1;
-  background-repeat: no-repeat;
-  background-size: cover;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-image: url("../assets/BackgrownLogin.jpg");
+  background-color: #f7e1e1;
+  overflow-y: auto;
 }
-.containerCLIMDB {
-  width: 100%;
-  max-width: 600px;
-  padding: 20px;
-}
+
+
 .headerCLIMDB {
   display: flex;
   justify-content: space-between;
@@ -100,6 +255,9 @@ body {
   padding: 20px;
   background-color: #ffffff;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  transform: translateX(50%);
+  
 }
 
 .logoCLI {
@@ -107,49 +265,201 @@ body {
   max-width: 200px;
 }
 
-.header-buttonsCLIMDB button {
-  margin-left: 10px;
-}
-
-.contentCLIMDB {
-  margin-top: 20px;
-  padding: 20px;
-  background-color: #ffffff;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-/*.contentCLIMDB {
-  margin-top: 20px;
+.header-buttonsCLIMDB button  {
+  display: block;
   width: 100%;
-  max-width: 600px;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #8b7a5e;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.3s;
+}
+.carrito-buttons button{
+  display: block;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #8b7a5e;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.3s;
+}
+button:hover {
+  background-color: #ffefd3;
+}
+
+.cart-box {
+  display: flex;
+  align-items: center;
+}
+.cart-icon {
+  width: 25px;
+  height: 25px;
+  margin-right: 5px;
+}
+.container{
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 20px;
   background-color: #ffffff;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}*/
-
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+  transform: translateX(50%);
+}
 .tabs1 {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
+  width: 100%;
 }
-
 .tab {
+  flex-grow: 1;
   padding: 10px 20px;
-  background-color: #8b7a5e;
-  color: #fff;
+  background-color: #9ba1a1 ;
+  color: #000000;
   border-radius: 5px;
   cursor: pointer;
 }
-
 .tab.active {
-  background-color: #ffefd3;
+  background-color: #eff7f6;
+}
+.tab-content {
+  margin-top: 10px;
+  background-color: #ffffff;
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transform: translateX(50%);
+}
+.product-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  max-height: 400px; /* Ajusta la altura máxima deseada */
+  overflow-y: auto;
+  border: 3px solid #f7e1e1;
 }
 
-.tab-contentCLIMDB h2 {
+.product-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 200px;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+}
+
+.product-image {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
   margin-bottom: 10px;
 }
 
+.product-price {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.product-card button{
+  display: block;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #8b7a5e;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.3s;
+}
+.category-list {
+  margin-top: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap:10px;
+  max-height: 70px; 
+  overflow-x: auto;
+  border: 4px solid rgb(175, 243, 252);
+}
+
+.category-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  width: 270px;
+}
+
+.category-image {
+  width: 100px;
+  height: 50px;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+.category-card:hover {
+  background-color: #e0e0e0;
+}
+
+.product-list-car {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  max-height: 400px; /* Ajusta la altura máxima deseada */
+  overflow-y: auto;
+  border: 3px solid #f7e1e1;
+}
+
+.product-car-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 200px;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+}
+
+.product-car-image {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.product-price {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.product-car-card button{
+  display: block;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #8b7a5e;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.3s;
+}
 </style>

@@ -52,6 +52,11 @@ const router = createRouter({
       path: '/Ejecutivo-Main-Dash-Board',
       name: 'EJV',
       component: ()=>import('../views/EJVMaindasboard.vue')
+    },
+    {
+      path: '/Branch-Register-Form',
+      name: 'BRANCHREG',
+      component: () => import('../views/StatementsRegister.vue')
     }
   ]
 })

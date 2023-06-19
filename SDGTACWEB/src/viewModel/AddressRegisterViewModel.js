@@ -6,12 +6,13 @@ import ValidatorAddressForm from '../utils/validation/ValidatorAddressForm.vue';
 import postAddressAxios from "../logic/AddressAxios";
 
 
+
 export async function getStates (options) {
     let array = [];
     let promise = getStatesAxios();
 
     await promise.then(data => {
-        array = data.estados;
+        array = data.estados; //Hay que colocar data.estados para obtener el arreglo de estados
         array.forEach(state => {
             options.states.push({
                 value: state.ESTADO,
@@ -160,14 +161,12 @@ export async function postAddress(userId, zipcode, state, municipality, suburb, 
         let promise = postAddressAxios(data);
     
         await promise.then(data => {
-            console.log("console(data) desde view model")
-            console.log(data);
             array = data;
         });
         
         return array;
     
-        }catch(error){
-            console.log(error);
-        }
+    }catch(error){
+        console.log(error);
+    }
 }

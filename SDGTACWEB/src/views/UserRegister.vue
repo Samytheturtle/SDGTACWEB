@@ -12,6 +12,7 @@
                     name="userType"
                     label="Cargo:"
                     @blur="validate"
+                    @change="handleUserTypeBranch"
                     v-bind:error="validations.userType"
                     v-model="userType"
                     :options="options.userTypes"
@@ -39,6 +40,7 @@
                     name="branch"
                     label="Sucursal:"
                     @blur="validate"
+                    @change="handleChangeBranch"
                     v-bind:error="validations.branch"
                     v-model="branch"
                     :options="options.branches"
@@ -82,9 +84,15 @@ import CustomButton from '../components/CustomButton.vue';
 import CustomInput from '../components/CustomInput.vue';
 import CustomSelect from '../components/CustomSelect.vue';
 import { 
+    getAllBranch,
     validateForm,
-    handleInputChange
+    handleInputChange,
+    postUser
 } from '../viewModel/UserRegisterViewModel';
+
+var respuesta = [];
+var branchArray = [];
+var userTypeArray = [];
 
 const dateNow = new Date().toISOString().split('T')[0];
 
@@ -94,7 +102,7 @@ export default{
             userType: null,
             fullName: "",
             registerDate: dateNow,
-            branch: null,
+            branch: "",
             username: "",
             password: "",
             confirmedPassword: "",
@@ -109,28 +117,65 @@ export default{
             },
             options:{
                 branches: [],
-                userTypes: []
+                userTypes: 
+                        [
+                            {value:1, label:"ADMINISTRADOR"},
+                            {value:2, label:"REPARTIDOR"},
+                            {value:3, label:"EJECUTIVO DE VENTA"}
+                        ]
             }
         };
     },
     methods: {
-        registerUser() {
+        async registerUser() {
             const messages = validateForm(this);
-
             if (messages.length === 0) {
-                this.$router.push("/Client-Main-Dash-Board");
+                //Haciendo POST con Axios
+                const promise = postUser(this.userType, this.fullName, this.registerDate, this.username, this.password, this.branch);
+                
+                await promise.then(array => respuesta = array);
+                console.log("Respuesta: ");
+                console.log(respuesta)
+
+                if(respuesta.affectedRows == 1){
+                    alert("¡Se registró el usuario!")
+                    this.$router.push("/Administrador-Main-Dash-Board");
+                }else{
+                    console.log("No se registró el usuario");
+                }           
             }else{
                 alert('Llene los campos correctamente');
             }
         },
         validate(event) {
-            const name = event.target.name;
-            
-            handleInputChange(name, data);
+            const name = event.target.name;   
+            handleInputChange(name, this);
         },
         cancel() {
             this.$router.push("/Administrator-Main-Dash-Board");
+        },
+        async handleChangeBranch(event){ //Actualizando la lista de Sucursales
+            const branch = branchArray.find(branch => 
+                branch.nombreComercial === this.branch
+            );
+        },
+        async handleUserTypeBranch(event){ //Actualizando la lista de tipos de usuario
+            const userType = userTypeArray.find(userType => 
+                userType.label === this.userType
+            );
         }
+    },
+    async mounted(){
+        const promise = getAllBranch(this.options);
+        await promise.then(array => branchArray = array);
+        userTypeArray = [   
+                        {value:1, label:"ADMINISTRADOR"},
+                        {value:2, label:"REPARTIDOR"},
+                        {value:3, label:"EJECUTIVO DE VENTA"}
+                    ];
+
+        //console.log(branchArray);
+        //console.log(userTypeArray);
     },
     components: { CustomInput, CustomSelect, CustomButton }
 }
@@ -146,6 +191,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    background-image: url("../assets/BackgrownLogin.jpg");
 }
 
 .logoRG {
