@@ -191,6 +191,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    background-image: url("../assets/BackgrownLogin.jpg");
 }
 
 .logoRG {

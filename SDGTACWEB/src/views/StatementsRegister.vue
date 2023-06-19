@@ -164,6 +164,7 @@ body {
     align-items: center;
     margin: 0;
     padding: 0;
+    background-image: url("../assets/BackgrownLogin.jpg");
 }
 
 .logoRG {
