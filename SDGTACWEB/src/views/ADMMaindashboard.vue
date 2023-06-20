@@ -1,47 +1,64 @@
 <template>
-    <div>
-        <button @click="showBranches">Sucursales</button>
-        <button @click="showUsers">Usuarios</button>
-        <button @click="showProducts">Productos</button>
-        <button @click="salir">Salir</button>
-    </div>
-    <div class="container-table" id="table-branch">
-        <CustomButton @click="registerBranch" description="Registrar"/>
-        <DataTable 
-            :options="optionsTable"
-            class="table table-hover table-borderless"
-            width="100%"
-            ref="table"
-            :data="branches"
-            :columns="columnsBranch"
-        />
-    </div>
-    <div class="container-table" id="table-user" hidden>
-        <CustomButton @click="registerUser" description="Registrar"/>
-        <DataTable 
-            :options="optionsTable"
-            class="table table-hover table-borderless"
-            width="100%"
-            ref="table"
-            :data="users"
-            :columns="columnsUser"
-        />
-    </div>
-    <div class="container-table" id="table-product" hidden>
-        <CustomButton @click="registerProduct" description="Registrar"/>
-        <DataTable 
-            :options="optionsTable"
-            class="table table-hover table-borderless"
-            width="100%"
-            ref="table"
-            :data="products"
-            :columns="columnsProduct"
-        />
+    <div class="container">
+        <div class="sectionNav"> 
+            <CustomNavBar 
+                :class="{ active: active === 'branch' }"
+                @click="changeNav('branch')"
+                description="Consultar sucursales"
+            />
+
+            <CustomNavBar
+                :class="{ active: active === 'user' }"
+                @click="changeNav('user')"
+                description="Consultar usuarios"
+            />
+            
+            <CustomNavBar
+                :class="{ active: active === 'product' }"
+                @click="changeNav('product')"
+                description="Consultar productos"
+            />
+        </div>
+        <CustomButton @click="salir" description="Salir"/>
+        <div class="container-table" id="table-branch">
+            <CustomButton @click="registerBranch" description="Registrar"/>
+            <DataTable 
+                :options="optionsTable"
+                class="table"
+                width="100%"
+                ref="tableBranch"
+                :data="branches"
+                :columns="columnsBranch"
+            />
+        </div>
+        <div class="container-table" id="table-user" hidden>
+            <CustomButton @click="registerUser" description="Registrar"/>
+            <DataTable 
+                :options="optionsTable"
+                class="table"
+                width="100%"
+                ref="tableUser"
+                :data="users"
+                :columns="columnsUser"
+            />
+        </div>
+        <div class="container-table" id="table-product" hidden>
+            <CustomButton @click="registerProduct" description="Registrar"/>
+            <DataTable 
+                :options="optionsTable"
+                class="table"
+                width="100%"
+                ref="tableProduct"
+                :data="products"
+                :columns="columnsProduct"
+            />
+        </div>
     </div>
 </template>
 
 <script>
 import CustomButton from '../components/CustomButton.vue';
+import CustomNavBar from '../components/CustomNavBar.vue';
 import DataTable from 'datatables.net-vue3';
 import 'datatables.net-responsive';
 import 'datatables.net-select';
@@ -52,12 +69,6 @@ DataTable.use(DataTablesCore);
 
 const options = {
     language: {
-        select: {
-            rows: {
-                _: "%d filas seleccionadas",
-                1: "Una fila seleccionada"
-            }
-        },
         processing: 'Procesando...',
         lengthMenu: 'Mostrar _MENU_ registros',
         zeroRecords: 'No se encontraron resultados',
@@ -87,7 +98,9 @@ const options = {
     paging: true
 }
 
-const table = ref();
+const tableUser = ref();
+const tableBranch = ref();
+const tableProduct = ref();
 
 export default{
     setup(){
@@ -103,6 +116,7 @@ export default{
     },
     data(){
         return{
+            active: 'branch',
             optionsTable: options,
             columnsBranch: [
                 {
@@ -128,12 +142,8 @@ export default{
                     title: 'Nombre',
                 },
                 {
-                    //products: null,
-                    products: 'idCategoria',
-                    title: 'Categoría',
-                    /*render: function(data, type, row, meta){
-                        let users
-                    }*/
+                    products: 'nombreCategoria',
+                    title: 'Categoría'
                 },
                 {
                     products: 'descripcion',
@@ -157,14 +167,8 @@ export default{
             ],
             columnsUser: [
                 {
-                    //users: null,
-                    users: 'tipoUsuario',
-                    title: 'Tipo de usuario',
-                    /*render: function(data, type, row, meta){
-                        let that = this;
-                        globalThis.u
-                        return getUserType(data.tipoUsuario);
-                    }*/
+                    users: 'nombreTipoUsuario',
+                    title: 'Tipo de usuario'
                 },
                 {
                     users: 'nombreCompleto',
@@ -175,17 +179,25 @@ export default{
                     title: 'Fecha de ingreso'
                 },
                 {
-                    //users: null,
-                    users: 'idSucursal',
-                    title: 'Sucursal',
-                    /*render: function (data, type, row, meta){
-                        
-                    }*/
+                    users: 'nombreSucursal',
+                    title: 'Sucursal'
                 }
             ]
         }
     },
     methods:{
+        changeNav(nav){
+            if(nav === 'user'){
+                this.active = nav;
+                this.showUsers();
+            }else if(nav === 'branch'){
+                this.active = nav;
+                this.showBranches();
+            }else if(nav === 'product'){
+                this.active = nav;
+                this.showProducts();
+            }
+        },
         showUsers(){
             const tableBranch = document.getElementById('table-branch');
             tableBranch.hidden = true;
@@ -215,12 +227,18 @@ export default{
         },
         getUserType(userType){
             //buscar en la tabla tipousuario
+            //o colocar los ids y devolver el tipo de usuario
         },
         getBranch(userId){
-            //buscar en la tabla empleado-sucursal
+            /*
+                buscar en la tabla empleado-sucursal
+                y una vez obtenido el id de la sucursal, volver a buscar en la tabl sucursal
+                el return debe ser el nombre de la sucursal
+            */
         },
         getCategory(categoryId){
             //buscar en la tabla categoria
+            //el return es el nombre de la categoria
         },
         registerBranch(){
             this.$router.push('/Branch-Register-Form');
@@ -233,12 +251,24 @@ export default{
         }
     },
     mounted(){
-        //los resultados deben ser listas
-        //guardar en users el resultado obtenido de axios con Usuarios
-        //guardar en branches el resultado obtenido de axios con Sucursales
-        //guardar en products el resultado obtenido de axios con Productos
+        /*los resultados de axios deberian regresar listas
+            guardar en users el resultado obtenido de axios con Usuarios 
+            pero en cada objeto se necesita lo siguiente:
+                agregar el atributo nombreTipoUsuario
+                dentro de este atributo se le debe asignar el metodo getTypeUser
+
+        guardar en branches el resultado obtenido de axios con Sucursales
+            pero en cada objeto se necesita lo siguiente:
+                agregar el atributo nombreSucursal
+                dentro de este atributo se le debe asignar el metodo getBranch
+
+        guardar en products el resultado obtenido de axios con Productos
+            pero en cada objeto se necesita lo siguiente:
+                agregar el atributo nombreCategoria
+                dentro de este atributo se le debe asignar el metodo getCategory
+        */
     },
-    components: { CustomButton, CustomButton, DataTable }
+    components: { CustomButton, CustomButton, DataTable, CustomNavBar }
 }
 </script>
 
@@ -372,22 +402,10 @@ table th {
 	cursor: default;
 }
 
-button {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  font-weight: bold;
-  background-color: #83a4d7;
-  color: #fff;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: 0.3s;
-}
-
-button:hover {
-  background-color: #ffefd3;
+.sectionNav {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    width: 100%;
 }
 </style>
