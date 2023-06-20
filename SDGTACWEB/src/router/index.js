@@ -34,7 +34,7 @@ const router = createRouter({
       component: () => import('../views/UserRegister.vue')
     },
     {
-      path: '/Address-Register-Form',
+      path: '/Address-Register-Form/:token/:id',
       name: 'ADDREGISTER',
       component: () => import('../views/AddressRegister.vue')
     },

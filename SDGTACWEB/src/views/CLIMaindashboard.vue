@@ -155,7 +155,7 @@ export default {
       this.activeTab = tab;
     },
     addDeliveryAddress() {
-      // Lógica para agregar dirección de entrega
+      this.$router.push('/Address-Register-Form/'+this.userToken +'/'+ this.userId);
     },
     addPaymentMethod() {
       // Lógica para agregar método de pago

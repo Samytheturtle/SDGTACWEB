@@ -155,7 +155,9 @@ export default{
                 suburbs: [],
                 municipalities: [],
                 states: []
-            }
+            },
+            userId:"",
+            userToken:"",
         }
     },
     methods:{
@@ -168,7 +170,7 @@ export default{
 
                 //Haciendo POST con Axios
                 const promise = postAddress(this.userId, this.zipcode, this.state, this.municipality, this.suburb, this.street,
-                this.streetNumber, this.apartmentNumber, this.marker.position.lat, this.marker.position.lng);
+                this.streetNumber, this.apartmentNumber, this.marker.position.lat, this.marker.position.lng, this.userToken);
                 
                 //Comprobando Promise
                 console.log("Desde Address Register/nPromise: ");
@@ -231,8 +233,11 @@ export default{
         }
     },
     async mounted(){
+        this.userId= this.$route.params.id;
+        this.userToken = this.$route.params.token;
         const promise = getStates(this.options);
         await promise.then(array => statesArray = array);
+
     },
     components:{ CustomInput, CustomButton, CustomSelect, CustomGoogleMaps, CustomError }
 }

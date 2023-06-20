@@ -142,7 +142,7 @@ export function handleInputChange(name, data){
 }
 
 export async function postAddress(userId, zipcode, state, municipality, suburb, street, streetNumber, 
-    apartmentNumber, lat, lng){
+    apartmentNumber, lat, lng, userToken){
     try{
         var data = {
             idUsuario: userId,
@@ -158,7 +158,7 @@ export async function postAddress(userId, zipcode, state, municipality, suburb, 
         }
        
         let array = [];
-        let promise = postAddressAxios(data);
+        let promise = postAddressAxios(data, userToken);
     
         await promise.then(data => {
             array = data;
