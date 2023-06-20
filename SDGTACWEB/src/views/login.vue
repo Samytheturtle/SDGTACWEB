@@ -39,8 +39,11 @@ var respuesta = [];
     async login() {
       
       const promise = useLogin(this.username, this.password);
+      
       await promise.then(array => respuesta = array);
-
+      console.log(respuesta.token);
+      
+      
       //useLogin(this.username, this.password);
       //console.log(res);
       if(respuesta.message == "authenticated user"){
@@ -59,8 +62,8 @@ var respuesta = [];
           }else{
             //alert("Usuario: " + this.username + "\nContraseña: " + this.password);
             // Redirige a la página de inicio de sesión exitosa
-          
-            this.$router.push('/Client-Main-Dash-Board', promise);
+            let prueba="CACA"
+            this.$router.push('/Client-Main-Dash-Board/'+respuesta.token +'/'+ respuesta.id);
           }
       }
 

@@ -107,6 +107,9 @@
 </template>
 
 <script>
+import { ref } from 'vue'
+import categoriaProductos from '../viewModel/CategoriaViewModel'
+import allcategorys from '../viewModel/CategoriaViewModel'
 export default {
   data() {
     return {
@@ -120,10 +123,16 @@ export default {
       categories: [],
       cartProducts: [],
       historyProducts: [],
+      userId: "",
+      userToken: "",
     };
   },mounted() {
   // Ejemplo de llamada al método para generar 5 tarjetas
+  this.userId= this.$route.params.id;
+  this.userToken = this.$route.params.token;
   
+  console.log(this.userId,this.userToken);
+
   this.catalogProducts = this.createProductCards();
   this.categories= this.createCategoryCards();
   this.cartProducts= this.createProductCardsCarrito();
@@ -177,7 +186,11 @@ export default {
         cards.push(product);
       }
       return cards;
-    },createCategoryCards(quantity) {
+    },async createCategoryCards(quantity) {
+      const promise = allcategorys(token);
+      await promise.then(array => respuesta = array);
+      console.log(respuesta.length);
+
       const countProducts=5;
       const cards = [];
       for (let i = 0; i < countProducts; i++) {
@@ -223,11 +236,14 @@ export default {
       this.cartCount += 1; // Incrementar el valor de cartCount en 1
       console.log(this.cartCount);
 
-    },generateProducts(categoryId) {
-      const minQuantity = 5;
+    },async generateProducts(categoryId) {
+      const promise = categoriaProductos(categoryId,token);
+      await promise.then(array => respuesta = array);
+      console.log(respuesta)
+      /*const minQuantity = 5;
       const maxQuantity = 20;
       const quantity = Math.floor(Math.random() * (maxQuantity - minQuantity + 1) + minQuantity);
-
+      */
       const selectedCategory = this.categories.find((category) => category.id === categoryId);
 
       if (selectedCategory) {

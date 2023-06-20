@@ -4,7 +4,7 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/Client-Main-Dash-Board',
+      path: '/Client-Main-Dash-Board/:token/:id',
       name: 'CLIMDB',
       component: () => import('../views/CLIMaindashboard.vue')
     },
