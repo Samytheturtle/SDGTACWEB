@@ -81,6 +81,7 @@ const options = {
     },
     autoWidth: true,
     scrollY: 300,
+    scrollX: true,
     select: 'single',
     responsive: true,
     paging: true

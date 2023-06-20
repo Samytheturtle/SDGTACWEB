@@ -3,59 +3,74 @@
         <label>
             {{ label }}
         </label>
-        <select :name="name" @blur="blur" @change="change" :value="modelValue" @input="updateValue">
-            <option v-for="option in options" v-bind:value="option.value">
+        <select 
+            class="select-custom"
+            :name="name" 
+            @blur="blur" 
+            @change="change" 
+            :value="modelValue" 
+            @input="updateValue"
+        >
+            <option 
+                v-for="option in options" 
+                v-bind:value="option.value"
+            >
                 {{ option.label }}
             </option>
         </select>
-        <span class="error" v-if="error">{{ error }}</span>
+        <CustomError :error="error"/>
     </div>
 </template>
 
-<script scoped>
+<script>
+import CustomError from './CustomError.vue';
+
 export default{
-    props:{
+    props: {
         options: Array,
         label: String,
         error: String,
         name: String,
-        modelValue: ''
+        modelValue: ""
     },
-    setup(props, context){
+    setup(props, context) {
         const updateValue = (event) => {
-            context.emit('update:modelValue', event.target.value);
-        }
+            context.emit("update:modelValue", event.target.value);
+        };
         const blur = (event) => {
-            context.emit('blur', event);
-        }
+            context.emit("blur", event);
+        };
         const change = (event) => {
-            context.emit('change', event);
-        }
-        return {updateValue, blur, change}
-    }
+            context.emit("change", event);
+        };
+        return { updateValue, blur, change };
+    },
+    components: { CustomError }
 }
 </script>
 
 <style>
 .form-group {
-  margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 label {
-  display: block;
-  font-weight: bold;
-  color: black;
+    display: block;
+    font-weight: bold;
+    color: black;
 }
 
-select {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  border-color: #8b7a5e;
+.select-custom {
+    font-size: 20px;
+    width: 100%;
+    padding: 8px;
+    margin: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    border-color: #8b7a5e;
 }
 
-.error{
-    color: red;
+.select-custom:focus {
+    background-color: #fffee4;
 }
 </style>

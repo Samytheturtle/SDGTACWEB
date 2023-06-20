@@ -125,7 +125,7 @@ export default{
                     {label: 'MasterCard', value: 'MasterCard'}
                 ]
             }
-        };
+        }
     },
     methods: {
         async registerMethod() {

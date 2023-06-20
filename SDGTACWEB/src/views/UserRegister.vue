@@ -7,7 +7,8 @@
         <div class="container">
             <h1>Registro de usuario</h1>
 
-            <form>
+            <form class="form-custom">
+
                 <CustomSelect
                     name="userType"
                     label="Cargo:"
@@ -89,6 +90,7 @@ import {
     handleInputChange,
     postUser
 } from '../viewModel/UserRegisterViewModel';
+import { MqResponsive } from 'vue3-mq';
 
 var respuesta = [];
 var branchArray = [];
@@ -177,7 +179,7 @@ export default{
         //console.log(branchArray);
         //console.log(userTypeArray);
     },
-    components: { CustomInput, CustomSelect, CustomButton }
+    components: { CustomInput, CustomSelect, CustomButton, MqResponsive }
 }
 </script>
 
@@ -219,6 +221,7 @@ h1 {
   font-weight: bold;
   text-align: center;
 }
+
 .container {
     position:absolute;
     display: block;
@@ -235,7 +238,7 @@ h1 {
     overflow-y: auto;
 }
 
-form {
+.form-custom {
     margin-top: 20px;
 }
 </style>

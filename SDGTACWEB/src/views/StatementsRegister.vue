@@ -159,25 +159,26 @@ export default{
 body {
     font-family: Arial, sans-serif;
     background-color: #f7e1e1;
+    background-repeat: no-repeat;
+    background-size: cover;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0;
-    padding: 0;
-    background-image: url("../assets/BackgrownLogin.jpg");
+    height: 100vh;
+    background-image: url("../assets/BackgrownLogin.jpg")
 }
 
 .logoRG {
     position: relative;
     width: 100%;
     max-width: 300px;
-    display: inline-block;
+    display: flex;
 }
 
 .BackgrountlogoRG {
-    position: relative;
-    top: 20%;
-    left: 100%; 
+    position: fixed;
+    top: 10%; 
+    left: 50%; 
     transform: translateX(-50%);
     width: 50%; 
     max-width: 200px;
@@ -194,17 +195,19 @@ h1 {
 }
 
 .container {
-    position: relative;
+    position:absolute;
     display: block;
-    top: 30%;
-    left: 100%;
-    margin-bottom: 20px;
+    width: 80%;
+    top: 30%; 
+    bottom: 5%;
     transform: translateX(-50%);
+    max-width: 2000px;
     padding: 20px;
     background-color: #ffffff;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
 }
 
 form {

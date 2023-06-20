@@ -111,7 +111,7 @@ export default{
 
 <style scoped>
 #map{
-    width: 100vh;
+    width: 100%;
     height: 300px;
     background-color: azure;
     margin-top: 20px;

@@ -1,5 +1,5 @@
 <template>
-    <button @click="click">{{ description }}</button>
+    <button class="button-custom" @click="click">{{ description }}</button>
 </template>
 
 <script>
@@ -16,7 +16,7 @@ export default{
 </script>
 
 <style scoped>
-button {
+.button-custom {
   display: block;
   width: 100%;
   padding: 10px;
@@ -31,7 +31,7 @@ button {
   transition: 0.3s;
 }
 
-button:hover {
+.button-custom:hover {
   background-color: #ffefd3;
 }
 </style>

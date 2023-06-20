@@ -3,6 +3,7 @@
         <label>
             {{ label }}
             <input 
+                class="input-custom"
                 :type="type" 
                 :name="name" 
                 @blur="blur" 
@@ -40,23 +41,27 @@ export default{
 
 <style>
 .form-group {
-  margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 label {
-  display: block;
-  font-weight: bold;
-  color: black;
+    display: block;
+    font-weight: bold;
+    color: black;
 }
 
-input[type="text"],
-input[type="date"],
-input[type="password"],
-input[type="number"] {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  border-color: #8b7a5e;
+.input-custom {
+    display: block;
+    font-size: 20px;
+    width: 100%;
+    padding: 8px;
+    margin: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    border-color: #8b7a5e;
+}
+
+.input-custom:focus {
+    background-color: #fffee4;
 }
 </style>
