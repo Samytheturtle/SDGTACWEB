@@ -2,12 +2,12 @@
 
 import axios from "axios";
 
-export const getCartProductsAxios = async (idCarro, token) => {  
+export const getCartProductsAxios = async (id, token) => {  
     try{
         const config = {
             headers: { Authorization: `Bearer ${token}` }
         };
-        const {data: promise} = await axios.get('https://cuevas-api.onrender.com/carromain/carroProducto/'+idCarro, token);
+        const {data: promise} = await axios.get('https://cuevas-api.onrender.com/carromain/carroProducto/'+id, config);
         return promise;
 
     }catch(error){

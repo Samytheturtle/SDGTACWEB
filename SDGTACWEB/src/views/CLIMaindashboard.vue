@@ -105,7 +105,7 @@
 
 <script>
 import { ref } from 'vue'
-import {allcategorys, categoryByid, getallproductos} from '../viewModel/CategoriaViewModel';
+import {allcategorys, categoryByid, getallproductos,getallproductCar} from '../viewModel/CategoriaViewModel';
 
 export default {
   data() {
@@ -125,6 +125,7 @@ export default {
       respuestaCategoria:[],
       respuestaCategoriabyid:[],
       respuestaallProductos:[],
+      respuestaallCarProducts:[],
     };
   },async mounted() {
   // Ejemplo de llamada al método para generar 5 tarjetas
@@ -134,6 +135,8 @@ export default {
   console.log(this.userId,this.userToken);
   await this.funcion1();
   await this.funcion3();
+  console.log(this.userToken+"sdasdbnkb21ub");
+  await this.funcion4();
   this.catalogProducts = this.createProductCards();
   this.categories= this.createCategoryCards();
   this.cartProducts= this.createProductCardsCarrito();
@@ -141,7 +144,7 @@ export default {
   methods: {
     changeTab(tab) {
       if (tab === "carrito") {
-        this.generateCarProduct();
+        this.createProductCardsCarrito();
       }else if(tab ==="catalogo"){
         this.catalogProducts = this.createProductCards();
         this.categories= this.createCategoryCards();
@@ -226,21 +229,28 @@ export default {
       console.log(promise);
       console.log(this.respuestaallProductos.length);
 
+    },async funcion4(){
+      console.log(this.userToken+"CACAAAAAAAAAA");
+      const promise = getallproductCar(this.userId,this.userToken);
+      await promise.then(array => this.respuestaallCarProducts = array);
+      console.log(promise);
+      console.log(this.respuestaallCarProducts.length);
     },createProductCardsCarrito(quantity) {
-      const countRecobery=10;
-      this.cartCount =countRecobery;
+  
       const cards = [];
-      for (let i = 0; i < this.cartCount; i++) {
+      for (let i = 0; i < this.respuestaallCarProducts.length; i++) {
         const productCar = {
-          id: i + 1,
-          name: `Producto ${i + 1}`,
+          id: this.respuestaallCarProducts[i].producto,
+          name: `Producto ${this.respuestaallCarProducts[i].producto}`,
           image: `../assets/product${i + 1}.png`,
-          price: `$${(Math.random() * 50).toFixed(2)}`,
-          description: `Descripción del Producto ${i + 1}`,
-          quantity: i,
+          price: `$${this.respuestaallCarProducts[i].precio}`,
+          description: ``,
+          quantity: this.respuestaallCarProducts[i].cantidad,
         };
         cards.push(productCar);
+        
       }
+      
       return cards;
     },createHistorialCards(quantity) {
       const countProducts=5;
@@ -266,7 +276,7 @@ export default {
       const quantity = Math.floor(Math.random() * (maxQuantity - minQuantity + 1) + minQuantity);
       
       const selectedCategory = this.categories.find((category) => category.id === categoryId);
-      console.log("CACA");
+     
       console.log(selectedCategory.id);
       await this.funcion2(selectedCategory.id);
       if (selectedCategory) {
@@ -275,7 +285,7 @@ export default {
           const product = {
             id: this.respuestaCategoriabyid[i].idProducto,
             name: `Producto ${this.respuestaCategoriabyid[i].nombre}`,
-            image: `../assets/product${i + 1}.png`,
+            image: this.respuestaCategoriabyid[i].imagenProducto,
             price: this.respuestaCategoriabyid[i].precio,
             description: `Descripción del Producto ${this.respuestaCategoriabyid[i].descripcion}`,
           };
