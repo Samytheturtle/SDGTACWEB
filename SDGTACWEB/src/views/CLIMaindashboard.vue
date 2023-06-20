@@ -11,7 +11,6 @@
         <button @click="logout">Salir</button>
       </div>
     </div>
-
     <div class="container">
       <div class="cart-box">
           <img src="../assets/cart_icon.png" alt="Icono de carrito" class="cart-icon" />
@@ -44,14 +43,12 @@
     <div class="tab-content">
         <template v-if="activeTab === 'catalogo'">
           <h2>Consultar Catálogo de Productos</h2>
-
           <div class="category-list">
             <div v-for="category in categories" :key="category.id" class="category-card" @click="generateProducts(category.id)">
               <img :src="category.image" alt="Imagen del categoria" class="category-image" />
               <h3>{{ category.name }}</h3>
             </div>
           </div>
-
           <div class="product-list">
             <div v-for="product in catalogProducts" :key="product.id" class="product-card">
               <img :src="product.image" alt="Imagen del producto" class="product-image" />
@@ -61,7 +58,6 @@
               <button @click="addToCart">Agregar al carrito</button> 
             </div>
           </div>
-
         </template>
         <template v-if="activeTab === 'carrito'">
           <h2>Lista del carrito de compras</h2>
@@ -91,6 +87,7 @@
         <template v-if="activeTab === 'pedidos'">
           <h2>Visualizar Lista de Pedidos</h2>
 
+ 
           <div class="product-list-historial">
             <div v-for="productHistorial in catalogProducts" :key="productHistorial.id" class="product-card-historial">
               <img :src="productHistorial.image" alt="Imagen del producto" class="product-image-historial" />
@@ -108,8 +105,8 @@
 
 <script>
 import { ref } from 'vue'
-import categoriaProductos from '../viewModel/CategoriaViewModel'
 import allcategorys from '../viewModel/CategoriaViewModel'
+import categoryByid from '../viewModel/CategoriaViewModel'
 export default {
   data() {
     return {
@@ -125,13 +122,16 @@ export default {
       historyProducts: [],
       userId: "",
       userToken: "",
+      respuestaCategoria:[],
+      respuestaCategoriabyid:[],
     };
-  },mounted() {
+  },async mounted() {
   // Ejemplo de llamada al método para generar 5 tarjetas
   this.userId= this.$route.params.id;
   this.userToken = this.$route.params.token;
   
   console.log(this.userId,this.userToken);
+  await this.funcion1();
 
   this.catalogProducts = this.createProductCards();
   this.categories= this.createCategoryCards();
@@ -186,22 +186,36 @@ export default {
         cards.push(product);
       }
       return cards;
-    },async createCategoryCards(quantity) {
-      const promise = allcategorys(token);
-      await promise.then(array => respuesta = array);
-      console.log(respuesta.length);
-
-      const countProducts=5;
+    },createCategoryCards(quantity) {
+      //const promise = allcategorys(token);
+      //await promise.then(array => respuesta = array);
+      console.log(this.respuestaCategoria.length);
+      const Nombre=this.respuestaCategoria[0].nombreCategoria;
+      console.log(Nombre);
+     // const countProducts=5;
       const cards = [];
-      for (let i = 0; i < countProducts; i++) {
+      for (let i = 0; i < this.respuestaCategoria.length; i++) {
         const category = {
-          id: i + 1,
-          name: `Categoria: ${i + 1}`,
-          image: `../assets/product${i + 1}.png`,
+          id: i + this.respuestaCategoria[i].idCategoria,
+          name: `Categoria: ${this.respuestaCategoria[i].nombreCategoria}`,
+          image: this.respuestaCategoria[i].imagenCategoria,
         };
+        console.log(this.respuestaCategoria[i].idCategoria);
         cards.push(category);
       }
       return cards;
+    },async funcion1(){
+      
+      const promise = allcategorys(this.userToken);
+      await promise.then(array => this.respuestaCategoria = array);
+      console.log(this.respuestaCategoria[0].nombreCategoria);
+      
+    },async funcion2(categoryId){
+      const promise = categoryByid(categoryId,rhis.userToken);
+      await promise.then(array => this.respuestaCategoriabyid = array);
+      console.log(this.respuestaCategoriabyid[0].nombreCategoria);
+
+
     },createProductCardsCarrito(quantity) {
       const countRecobery=10;
       this.cartCount =countRecobery;
@@ -236,25 +250,23 @@ export default {
       this.cartCount += 1; // Incrementar el valor de cartCount en 1
       console.log(this.cartCount);
 
-    },async generateProducts(categoryId) {
-      const promise = categoriaProductos(categoryId,token);
-      await promise.then(array => respuesta = array);
-      console.log(respuesta)
-      /*const minQuantity = 5;
+    }, async generateProducts(categoryId) {
+      const minQuantity = 5;
       const maxQuantity = 20;
       const quantity = Math.floor(Math.random() * (maxQuantity - minQuantity + 1) + minQuantity);
-      */
+      
       const selectedCategory = this.categories.find((category) => category.id === categoryId);
-
+      console.log(selectedCategory);
+      await funcion2(selectedCategory);
       if (selectedCategory) {
         const newProducts = [];
-        for (let i = 0; i < quantity; i++) {
+        for (let i = 0; i < this.respuestaCategoriabyid.length; i++) {
           const product = {
-            id: this.catalogProducts.length + i + 1,
-            name: `Producto ${this.catalogProducts.length + i + 1}`,
+            id: this.respuestaCategoriabyid[i].idProducto,
+            name: `Producto ${this.respuestaCategoriabyid[i].nombre}`,
             image: `../assets/product${i + 1}.png`,
-            price: selectedCategory.id,
-            description: `Descripción del Producto ${this.catalogProducts.length + i + 1}`,
+            price: this.respuestaCategoriabyid[i].precio,
+            description: `Descripción del Producto ${this.respuestaCategoriabyid[i].descripcion}`,
           };
           newProducts.push(product);
         }

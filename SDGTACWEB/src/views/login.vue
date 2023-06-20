@@ -62,7 +62,6 @@ var respuesta = [];
           }else{
             //alert("Usuario: " + this.username + "\nContraseña: " + this.password);
             // Redirige a la página de inicio de sesión exitosa
-            let prueba="CACA"
             this.$router.push('/Client-Main-Dash-Board/'+respuesta.token +'/'+ respuesta.id);
           }
       }
