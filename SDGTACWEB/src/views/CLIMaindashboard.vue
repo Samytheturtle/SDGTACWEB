@@ -90,7 +90,16 @@
         </template>
         <template v-if="activeTab === 'pedidos'">
           <h2>Visualizar Lista de Pedidos</h2>
-          <!-- Aquí puedes mostrar la lista de pedidos -->
+
+          <div class="product-list-historial">
+            <div v-for="productHistorial in catalogProducts" :key="productHistorial.id" class="product-card-historial">
+              <img :src="productHistorial.image" alt="Imagen del producto" class="product-image-historial" />
+              <h3>{{ productHistorial.name }}</h3>
+              <p class="product-image-historial">{{ productHistorial.price }}</p>
+              <p>{{ productHistorial.description }}</p>
+            </div>
+          </div>
+
         </template>
     </div>    
 
@@ -110,6 +119,7 @@ export default {
       catalogProducts: [],
       categories: [],
       cartProducts: [],
+      historyProducts: [],
     };
   },mounted() {
   // Ejemplo de llamada al método para generar 5 tarjetas
@@ -120,6 +130,15 @@ export default {
   },
   methods: {
     changeTab(tab) {
+      if (tab === "carrito") {
+        this.generateCarProduct();
+      }else if(tab ==="catalogo"){
+        this.catalogProducts = this.createProductCards();
+        this.categories= this.createCategoryCards();
+      }else if(tab ==="pedidos"){
+        this.historyProducts = this.createHistorialCards();
+      }
+
       this.activeTab = tab;
     },
     addDeliveryAddress() {
@@ -186,10 +205,23 @@ export default {
         cards.push(productCar);
       }
       return cards;
+    },createHistorialCards(quantity) {
+      const countProducts=5;
+      const cards = [];
+      for (let i = 0; i < countProducts; i++) {
+        const productHistorial = {
+          id: i + 1,
+          name: `Producto ${i + 1}`,
+          image: `../assets/product${i + 1}.png`,
+          price: `$${(Math.random() * 50).toFixed(2)}`,
+          description: `Descripción del Producto ${i + 1}`,
+        };
+        cards.push(productHistorial);
+      }
+      return cards;
     },addToCart() {
       this.cartCount += 1; // Incrementar el valor de cartCount en 1
       console.log(this.cartCount);
-      this.cartProducts = this.generateCarProduct(this.cartCount);
 
     },generateProducts(categoryId) {
       const minQuantity = 5;
@@ -217,10 +249,10 @@ export default {
         console.log(this.selectedCategory = selectedCategory);
         console.log( this.catalogProducts = newProducts);
       }
-    },generateCarProduct(quantity) {
-        console.log(quantity);
+    },generateCarProduct() {
+        console.log(this.cartCount);
         const newProductCar = [];
-        for (let i = 0; i < quantity; i++) {
+        for (let i = 0; i < this.cartCount; i++) {
           const productCar = {
             id: i + 1,
             name: `Producto ${i + 1}`,
@@ -449,6 +481,52 @@ button:hover {
   margin-bottom: 5px;
 }
 .product-car-card button{
+  display: block;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #8b7a5e;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.3s;
+}
+
+.product-list-historial {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  max-height: 400px; /* Ajusta la altura máxima deseada */
+  overflow-y: auto;
+  border: 3px solid #f7e1e1;
+}
+
+.product-card-historial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 200px;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+}
+
+.product-image-historial {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.product-price-historial {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.product-card-historial button{
   display: block;
   width: 100%;
   padding: 10px;
