@@ -7,7 +7,7 @@ export default async function useLogin(u, pass){
     //si es nombre de usuario se envia dataUsu, si es telefono se envia dataTel
     //u es string
     
-    alert(u.length);
+    
     if (u.length == 10){
         var data = {
             telefono: u,

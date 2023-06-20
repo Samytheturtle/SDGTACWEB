@@ -8,7 +8,7 @@ const getCategoryById = async (id, token) => {
         const config = {
             headers: { Authorization: `Bearer ${token}` }
         };
-        const {data: promise} = await axios.get('https://cuevas-api.onrender.com/categoria/producto/'+id,token);
+        const {data: promise} = await axios.get('https://cuevas-api.onrender.com/categoria/producto/'+id,config);
         return promise;
 
     }catch(error){

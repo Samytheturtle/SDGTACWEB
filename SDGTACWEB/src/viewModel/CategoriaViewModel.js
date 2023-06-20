@@ -1,7 +1,9 @@
 import getCategory from "../logic/CategoryAxios";
-import getelementsbyId from "../logic/CategoryAxios2";
+import getelementsbyId from "../logic/CategoriaAxios2";
+import { getProductosAxios } from "../logic/ProductAxios2";
 
-export default async function allcategorys(token){
+
+export  async function allcategorys(token){
     try{
 
     let array = [];
@@ -18,11 +20,28 @@ export default async function allcategorys(token){
         console.log(error);
     }
 }
-export default async function categoryByid(id,token){
+export  async function categoryByid(id,token){
     try{
 
     let array = [];
     let promise = getelementsbyId(id, token);
+
+    await promise.then(data => {
+        console.log(data);
+        array = data;
+    });
+    
+    return array;
+
+    }catch(error){
+        console.log(error);
+    }
+}
+export  async function getallproductos(token){
+    try{
+
+    let array = [];
+    let promise = getProductosAxios(token);
 
     await promise.then(data => {
         console.log(data);

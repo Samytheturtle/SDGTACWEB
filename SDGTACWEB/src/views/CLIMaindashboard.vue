@@ -105,8 +105,8 @@
 
 <script>
 import { ref } from 'vue'
-import allcategorys from '../viewModel/CategoriaViewModel'
-import categoryByid from '../viewModel/CategoriaViewModel'
+import {allcategorys, categoryByid, getallproductos} from '../viewModel/CategoriaViewModel';
+
 export default {
   data() {
     return {
@@ -124,6 +124,7 @@ export default {
       userToken: "",
       respuestaCategoria:[],
       respuestaCategoriabyid:[],
+      respuestaallProductos:[],
     };
   },async mounted() {
   // Ejemplo de llamada al método para generar 5 tarjetas
@@ -132,7 +133,7 @@ export default {
   
   console.log(this.userId,this.userToken);
   await this.funcion1();
-
+  await this.funcion3();
   this.catalogProducts = this.createProductCards();
   this.categories= this.createCategoryCards();
   this.cartProducts= this.createProductCardsCarrito();
@@ -173,15 +174,16 @@ export default {
       this.cartCount= 0;
       this.cartProducts = [];
     },createProductCards(quantity) {
+      console.log(this.respuestaallProductos.length+"CACA");
       const countProducts=5;
       const cards = [];
-      for (let i = 0; i < countProducts; i++) {
+      for (let i = 0; i < this.respuestaallProductos.length; i++) {
         const product = {
-          id: i + 1,
-          name: `Producto ${i + 1}`,
-          image: `../assets/product${i + 1}.png`,
-          price: `$${(Math.random() * 50).toFixed(2)}`,
-          description: `Descripción del Producto ${i + 1}`,
+          id: this.respuestaallProductos[i].idProducto,
+          name: `Producto ${this.respuestaallProductos[i].nombre}`,
+          image: this.respuestaallProductos[i].imagenProducto,
+          price: `$${this.respuestaallProductos[i].precio}`,
+          description: `Descripción del Producto ${this.respuestaallProductos[i].descripcion}`,
         };
         cards.push(product);
       }
@@ -196,7 +198,7 @@ export default {
       const cards = [];
       for (let i = 0; i < this.respuestaCategoria.length; i++) {
         const category = {
-          id: i + this.respuestaCategoria[i].idCategoria,
+          id: this.respuestaCategoria[i].idCategoria,
           name: `Categoria: ${this.respuestaCategoria[i].nombreCategoria}`,
           image: this.respuestaCategoria[i].imagenCategoria,
         };
@@ -211,10 +213,18 @@ export default {
       console.log(this.respuestaCategoria[0].nombreCategoria);
       
     },async funcion2(categoryId){
-      const promise = categoryByid(categoryId,rhis.userToken);
+      console.log(this.userToken);
+      const promise = categoryByid(categoryId,this.userToken);
       await promise.then(array => this.respuestaCategoriabyid = array);
-      console.log(this.respuestaCategoriabyid[0].nombreCategoria);
+      console.log(promise);
 
+
+    },async funcion3(){
+      console.log(this.userToken);
+      const promise = getallproductos(this.userToken);
+      await promise.then(array => this.respuestaallProductos = array);
+      console.log(promise);
+      console.log(this.respuestaallProductos.length);
 
     },createProductCardsCarrito(quantity) {
       const countRecobery=10;
@@ -256,8 +266,9 @@ export default {
       const quantity = Math.floor(Math.random() * (maxQuantity - minQuantity + 1) + minQuantity);
       
       const selectedCategory = this.categories.find((category) => category.id === categoryId);
-      console.log(selectedCategory);
-      await funcion2(selectedCategory);
+      console.log("CACA");
+      console.log(selectedCategory.id);
+      await this.funcion2(selectedCategory.id);
       if (selectedCategory) {
         const newProducts = [];
         for (let i = 0; i < this.respuestaCategoriabyid.length; i++) {
