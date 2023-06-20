@@ -57,6 +57,11 @@ const router = createRouter({
       path: '/Branch-Register-Form',
       name: 'BRANCHREG',
       component: () => import('../views/StatementsRegister.vue')
+    },
+    {
+      path: '/Product-Register-Form',
+      name: 'PRODUCTREG',
+      component: () => import('../views/ProductRegister.vue')
     }
   ]
 })
