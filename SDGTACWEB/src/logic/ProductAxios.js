@@ -2,12 +2,12 @@
 
 import axios from "axios";
 
-const postProductAxios = async (data, token) => {  
+const postProductAxios = async (data, token) => { 
     try{
         const config = {
             headers: { Authorization: `Bearer ${token}` }
         };
-        const {data: promise} = await axios.post('https://cuevas-api.onrender.com/producto/', data, token);
+        const {data: promise} = await axios.post('https://cuevas-api.onrender.com/producto/', data, config);
         return promise;
 
     }catch(error){

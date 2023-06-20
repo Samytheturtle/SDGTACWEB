@@ -37,37 +37,27 @@ var respuesta = [];
   },
   methods: {
     async login() {
-      
       const promise = useLogin(this.username, this.password);
-      
       await promise.then(array => respuesta = array);
       console.log(respuesta.token);
       
-      
-      //useLogin(this.username, this.password);
-      //console.log(res);
       if(respuesta.message == "authenticated user"){
-        
       //consume el servicio de login
       
           if(respuesta.tipoUsuario == 1 ){
-            alert("tipo 1 - Admin");
-            this.$router.push('/Admin-Main-Dash-Board')
+            console.log("Inicio de sesión Administrador");
+            this.$router.push('/Admin-Main-Dash-Board/'+respuesta.token +'/'+ respuesta.id)
           }else if(respuesta.tipoUsuario == 2){
-            alert("tipo 2 - repartidor");
-            //this.$router.push('/Employee-Main-Dash-Board')
+            console.log("Inicio de sesión Repartidor");
+            this.$router.push('/RPD-Main-Dash-Board/'+respuesta.token +'/'+ respuesta.id)
           }else if(respuesta.tipoUsuario == 3){
-            alert("tipo 3 - ejecutivo venta");
-          
+            console.log("Inicio de sesión Ejecutivo de Venta");
+            this.$router.push('/EJV-Main-Dash-Board/'+respuesta.token +'/'+ respuesta.id)
           }else{
-            //alert("Usuario: " + this.username + "\nContraseña: " + this.password);
-            // Redirige a la página de inicio de sesión exitosa
+            console.log("Inicio de sesión Cliente");
             this.$router.push('/Client-Main-Dash-Board/'+respuesta.token +'/'+ respuesta.id);
           }
-      }
-
-      
-      
+      }      
     },
     register() {
       alert("Redirigiendo a la página de registro...");

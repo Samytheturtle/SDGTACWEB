@@ -1,5 +1,5 @@
 import ValidatorProductForm from '../utils/validation/ValidatorProductForm.vue';
-import postUserAxios from '../logic/UserAxios.js';
+import postProductAxios from '../logic/ProductAxios.js';
 
 
 export function validateForm(data){
@@ -12,8 +12,8 @@ export function validateForm(data){
     data.validations.productName = ValidatorProductForm.methods.validateProductName(
         data.productName
     );
-    data.validations.descripion = ValidatorProductForm.methods.validateDescription(
-        data.descripion
+    data.validations.description = ValidatorProductForm.methods.validateDescription(
+        data.description
     );
     data.validations.stock = ValidatorProductForm.methods.validateStock(
         data.stock
@@ -70,14 +70,22 @@ export function handleInputChange(name, data){
     }
 }
 
-export async function postProduct(category){
+export async function postProduct(category, barcode, productName, description, stock, price, image){
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2ODcyNzgzNTYsImV4cCI6MTY4NzI4MTk1Nn0.C0Q9j8fnORlclqygocSdGJCqH9S2RnuPJEmI2mFXUjI" ;
+
     try{
         var data = {
-            categoria: category
+            idCategoria: category,
+            codigoBarras: barcode,
+            nombre: productName, 
+            descripcion: description, 
+            existencias: stock, 
+            precio: price,
+            imagenProducto: image
         }
        
         let array = [];
-        let promise = postUserAxios(data);
+        let promise = postProductAxios(data, token);
     
         await promise.then(data => {
             array = data;

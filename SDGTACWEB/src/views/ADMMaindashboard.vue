@@ -111,7 +111,9 @@ export default{
         return {
             users,
             branches,
-            products
+            products,
+            userId: "",
+            userToken: ""
         }
     },
     data(){
@@ -185,6 +187,11 @@ export default{
             ]
         }
     },
+    async mounted() {
+        // Ejemplo de llamada al método para generar 5 tarjetas
+        this.userId= this.$route.params.id;
+        this.userToken = this.$route.params.token;
+    },
     methods:{
         changeNav(nav){
             if(nav === 'user'){
@@ -247,7 +254,7 @@ export default{
             this.$router.push('/User-Register-Form');
         },
         registerProduct(){
-            this.$router.push(''); //falta colocar ruta del registro del usuario
+            this.$router.push('/Product-Register-Form/'+this.userId, this.token); //falta colocar ruta del registro del usuario
         }
     },
     mounted(){

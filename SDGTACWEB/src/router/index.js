@@ -44,12 +44,12 @@ const router = createRouter({
       component: () => import('../views/StatementsRegister.vue')
     },
     {
-      path:  '/Administrator-Main-Dash-Board',
+      path: '/Administrator-Main-Dash-Board/:token/:id',
       name: 'ADMMDB',
       component: () => import('../views/ADMMaindashboard.vue')
     },
     {
-      path: '/Ejecutivo-Main-Dash-Board',
+      path: '/Ejecutivo-Main-Dash-Board/:token/:id',
       name: 'EJV',
       component: ()=>import('../views/EJVMaindasboard.vue')
     },

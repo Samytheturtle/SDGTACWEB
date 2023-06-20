@@ -71,9 +71,9 @@
                 />
 
                 <CustomInput 
-                    type="file"
+                    type="text"
                     name="image"
-                    label="Selecciona la imagen del producto:"
+                    label="Escribe la URL de la imagen:"
                     @blur="validate"
                     v-bind:error="validations.image"
                     v-model="image"
@@ -108,7 +108,7 @@ export default{
             description: "",
             stock: 0,
             price: 0,
-            image: null,
+            image: "",
             validations: {
                 category: "",
                 barcode: "",
@@ -132,21 +132,25 @@ export default{
                         ]
             }
         };
+    },async mounted() {
+        this.userId= this.$route.params.id;
+        this.userToken = this.$route.params.token;
     },
     methods: {
         async registerProduct() {
             const messages = validateForm(this);
             if (messages.length === 0) {
                 //Haciendo POST con Axios
-                const promise = postProduct();
+                const promise = postProduct(this.category, this.barcode, this.productName, this.description, this.stock, 
+                this.price, this.image);
                 
                 await promise.then(array => respuesta = array);
                 console.log("Respuesta: ");
                 console.log(respuesta)
 
-                if(respuesta.affectedRows == 1){
+                if(respuesta.idCategoria == this.category){
                     alert("¡Se registró el producto!")
-                    this.$router.push("/Administrador-Main-Dash-Board");
+                    this.$router.push("/Administrator-Main-Dash-Board");
                 }else{
                     console.log("No se registró el producto");
                 }           

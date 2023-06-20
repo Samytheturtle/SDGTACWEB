@@ -55,7 +55,13 @@ export default {
   data() {
     return {
       activeTab: 'catalog', // Tab activo por defecto
+      userId: "",
+      userToken: ""
     };
+  },
+  async mounted() {
+    this.userId= this.$route.params.id;
+    this.userToken = this.$route.params.token;
   },
   methods: {
     changeTab(tab) {

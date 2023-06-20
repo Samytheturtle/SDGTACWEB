@@ -66,9 +66,9 @@ export default{
         validateImage(value){
             const validator = Validator(value);
             if(validator.isEmpty()){
-                return 'Seleccione una imagen';
-            }else if(validator.size > 5 * 1024 * 1024){
-                return 'La imagen excede el limite de 5 megabytes';
+                return 'Pega la URL de la imagen';
+            }else if(!validator.isCorrectMaxLength(8000)){
+                return 'La URL es demasiado larga';
             }else{
                 return '';
             }
